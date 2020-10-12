@@ -1,0 +1,14 @@
+INSERT INTO defaultdb.users (id, first_name, last_name, age, phone, email, address, title, linkedin, github, facebook) VALUES (1, 'Jean', 'Lapin','22','+33659486592','jean.lapin@gmail.com','65 rue carotte, Agnette 25560','Boucher Junior','https://linkedin.com','https://github.com/resourcepool/','https://facebook.com');
+INSERT INTO defaultdb.presentation(pres_id, pres_title, description) VALUES (1, 'Bonjour, je suis Jean !', 'Je suis un étudiant en 5ème année en école d\'ingénieur (spécialité informatique) et je recherche un stage de fin d''études.');
+INSERT INTO defaultdb.experience(exp_id, exp_title, company_name, exp_location, start_date, end_date, exp_description) VALUES (1, 'Assistant Boucher', 'Boucherie Sanzot', 'Agnette, 25650', '2020-06-01', '2020-06-26', 'Assistant boucher dans la boucherie du coin. Découpage du poulet, massage du boeuf. ');
+INSERT INTO defaultdb.experience(exp_id, exp_title, company_name, exp_location, start_date, end_date, exp_description) VALUES (2, 'Assistant Charcutier', 'Charcuterie Porkass', 'Agnette, 25650', '2019-06-03', '2019-06-28', 'Assistant charcutier dans la charcuterie du coin. Préparation du boudin, massage du porc. ');
+INSERT INTO defaultdb.education(ed_id, edu_title, edu_name, edu_location, start_date, end_date, edu_description) VALUES (1, 'CAP Boucher/Charcutier', 'Institution du Pied de Porc', 'Agnette, 25650', '2017', '2020', 'Artisant maître boucher/charcutier spécialité cochonou');
+INSERT INTO defaultdb.education(ed_id, edu_title, edu_name, edu_location, start_date, end_date, edu_description) VALUES (2, 'Bac Pro', 'Instituion du Pied de Boeuf', 'Agnette, 25650', '2014', '2017', 'Bac avec mention très bien');
+INSERT INTO defaultdb.skills(skill_id, skill_name, skill_grade) VALUES (1, 'Découpage', 'Expert');
+INSERT INTO defaultdb.skills(skill_id, skill_name, skill_grade) VALUES (2, 'Roulage de saucisse', 'Intermédiaire');
+INSERT INTO defaultdb.skills(skill_id, skill_name, skill_grade) VALUES (3, 'Massage du porc', 'Hémérite');
+INSERT INTO defaultdb.skills(skill_id, skill_name, skill_grade) VALUES (4, 'Boudineur', 'Expert');
+INSERT INTO defaultdb.hobbies(hob_id, hob_title, hob_details) VALUES (1, 'Sport', 'Tennis, Squash');
+INSERT INTO defaultdb.hobbies(hob_id, hob_title, hob_details) VALUES (2, 'Musique', 'Tambour');
+INSERT INTO defaultdb.hobbies(hob_id, hob_title, hob_details) VALUES (3, 'Voyage', 'Allemagne');
+INSERT INTO defaultdb.projects(proj_id, proj_title, proj_date, proj_description) VALUES (1, 'Management de boucherie', '2016', 'Equipe de 4 à manager avec un scénario.');

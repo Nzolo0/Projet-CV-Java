@@ -18,9 +18,8 @@ data class User(
         @Column(name = "title") var title: String?,
         @Column(name = "linkedin") var linkedin: String?,
         @Column(name = "github") var github: String?,
-        @Column(name = "facebook") var facebook: String?,
-        @Column(name = "twitter") var twitter: String?
+        @Column(name = "facebook") var facebook: String?
 ) {
-    constructor() : this(null, null, null, null,null,null,null,null,null,null,null,null)
+    constructor() : this(null, null, null, null,null,null,null,null,null,null,null)
 
 }
