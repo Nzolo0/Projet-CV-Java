@@ -22,4 +22,46 @@ data class User(
 ) {
     constructor() : this(null, null, null, null,null,null,null,null,null,null,null)
 
+    override fun toString(): String {
+        return "User(id=$id, firstName=$firstName, lastName=$lastName, age=$age, phone=$phone, email=$email, address=$address, title=$title, linkedin=$linkedin, github=$github, facebook=$facebook, twitter=$twitter)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as User
+
+        if (id != other.id) return false
+        if (firstName != other.firstName) return false
+        if (lastName != other.lastName) return false
+        if (age != other.age) return false
+        if (phone != other.phone) return false
+        if (email != other.email) return false
+        if (address != other.address) return false
+        if (title != other.title) return false
+        if (linkedin != other.linkedin) return false
+        if (github != other.github) return false
+        if (facebook != other.facebook) return false
+        if (twitter != other.twitter) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (firstName?.hashCode() ?: 0)
+        result = 31 * result + (lastName?.hashCode() ?: 0)
+        result = 31 * result + (age ?: 0)
+        result = 31 * result + (phone?.hashCode() ?: 0)
+        result = 31 * result + (email?.hashCode() ?: 0)
+        result = 31 * result + (address?.hashCode() ?: 0)
+        result = 31 * result + (title?.hashCode() ?: 0)
+        result = 31 * result + (linkedin?.hashCode() ?: 0)
+        result = 31 * result + (github?.hashCode() ?: 0)
+        result = 31 * result + (facebook?.hashCode() ?: 0)
+        result = 31 * result + (twitter?.hashCode() ?: 0)
+        return result
+    }
+
 }
