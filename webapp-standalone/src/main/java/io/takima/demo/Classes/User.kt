@@ -23,7 +23,7 @@ data class User(
     constructor() : this(null, null, null, null,null,null,null,null,null,null,null)
 
     override fun toString(): String {
-        return "User(id=$id, firstName=$firstName, lastName=$lastName, age=$age, phone=$phone, email=$email, address=$address, title=$title, linkedin=$linkedin, github=$github, facebook=$facebook, twitter=$twitter)"
+        return "User(id=$id, firstName=$firstName, lastName=$lastName, age=$age, phone=$phone, email=$email, address=$address, title=$title, linkedin=$linkedin, github=$github, facebook=$facebook)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -43,7 +43,6 @@ data class User(
         if (linkedin != other.linkedin) return false
         if (github != other.github) return false
         if (facebook != other.facebook) return false
-        if (twitter != other.twitter) return false
 
         return true
     }
@@ -60,7 +59,6 @@ data class User(
         result = 31 * result + (linkedin?.hashCode() ?: 0)
         result = 31 * result + (github?.hashCode() ?: 0)
         result = 31 * result + (facebook?.hashCode() ?: 0)
-        result = 31 * result + (twitter?.hashCode() ?: 0)
         return result
     }
 
