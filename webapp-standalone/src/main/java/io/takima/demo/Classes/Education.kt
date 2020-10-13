@@ -5,16 +5,16 @@ import javax.persistence.*
 /**
  *
  */
-@Entity(name = "education")
+@Entity(name = "educations")
 data class Education(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Id var ed_id: Long?,
-        @Column(name = "edu_title") var edu_title: String?,
-        @Column(name = "edu_name") var edu_name: String?,
-        @Column(name = "edu_location") var edu_location: String?,
-        @Column(name = "start_date") var start_date: String?,
-        @Column(name = "end_date") var end_date: String?,
-        @Column(name = "edu_description") var edu_description: String?
+        @Id var id: Long?,
+        @Column(name = "title") var title: String?,
+        @Column(name = "name") var name: String?,
+        @Column(name = "location") var location: String?,
+        @Column(name = "start_date") var startDate: String?,
+        @Column(name = "end_date") var endDate: String?,
+        @Column(name = "description") var description: String?
 ) {
     constructor() : this(null, null, null, null,null,null,null)
 
@@ -24,30 +24,30 @@ data class Education(
 
         other as Education
 
-        if (ed_id != other.ed_id) return false
-        if (edu_title != other.edu_title) return false
-        if (edu_name != other.edu_name) return false
-        if (edu_location != other.edu_location) return false
-        if (start_date != other.start_date) return false
-        if (end_date != other.end_date) return false
-        if (edu_description != other.edu_description) return false
+        if (id != other.id) return false
+        if (title != other.title) return false
+        if (name != other.name) return false
+        if (location != other.location) return false
+        if (startDate != other.startDate) return false
+        if (endDate != other.endDate) return false
+        if (description != other.description) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = ed_id?.hashCode() ?: 0
-        result = 31 * result + (edu_title?.hashCode() ?: 0)
-        result = 31 * result + (edu_name?.hashCode() ?: 0)
-        result = 31 * result + (edu_location?.hashCode() ?: 0)
-        result = 31 * result + (start_date?.hashCode() ?: 0)
-        result = 31 * result + (end_date?.hashCode() ?: 0)
-        result = 31 * result + (edu_description?.hashCode() ?: 0)
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (title?.hashCode() ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (location?.hashCode() ?: 0)
+        result = 31 * result + (startDate?.hashCode() ?: 0)
+        result = 31 * result + (endDate?.hashCode() ?: 0)
+        result = 31 * result + (description?.hashCode() ?: 0)
         return result
     }
 
     override fun toString(): String {
-        return "Education(ed_id=$ed_id, edu_title=$edu_title, edu_name=$edu_name, edu_location=$edu_location, start_date=$start_date, end_date=$end_date, edu_description=$edu_description)"
+        return "Education(ed_id=$id, edu_title=$title, edu_name=$name, edu_location=$location, start_date=$startDate, end_date=$endDate, edu_description=$description)"
     }
 
 

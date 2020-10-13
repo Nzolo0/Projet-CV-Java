@@ -8,14 +8,14 @@ import javax.persistence.*
 @Entity(name = "skills")
 data class Skill(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Id var skill_id: Long?,
-        @Column(name = "skill_name") var skill_name: String?,
-        @Column(name = "skill_grade") var skill_grade: String?
+        @Id var id: Long?,
+        @Column(name = "name") var name: String?,
+        @Column(name = "grade") var grade: String?
 ) {
     constructor() : this(null, null, null)
 
     override fun toString(): String {
-        return "Skill(skill_id=$skill_id, skill_name=$skill_name, skill_grade=$skill_grade)"
+        return "Skill(id=$id, name=$name, grade=$grade)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -24,17 +24,17 @@ data class Skill(
 
         other as Skill
 
-        if (skill_id != other.skill_id) return false
-        if (skill_name != other.skill_name) return false
-        if (skill_grade != other.skill_grade) return false
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (grade != other.grade) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = skill_id?.hashCode() ?: 0
-        result = 31 * result + (skill_name?.hashCode() ?: 0)
-        result = 31 * result + (skill_grade?.hashCode() ?: 0)
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (grade?.hashCode() ?: 0)
         return result
     }
 }

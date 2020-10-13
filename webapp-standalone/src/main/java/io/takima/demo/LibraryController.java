@@ -16,8 +16,8 @@ import java.util.Optional;
 public class LibraryController {
 
     private final UserDAO userDAO;
-    private final HobbiesDAO hobbiesDao;
-    private final EducationDAO educationDao;
+    private final HobbyDAO hobbyDAO;
+    private final EducationDAO educationDAO;
     private final SkillDAO  skillDAO;
     private final ProjectDAO projectDAO;
     private final ExperienceDAO experienceDAO;
@@ -25,10 +25,10 @@ public class LibraryController {
 
 
 
-    public LibraryController(UserDAO userDAO, HobbiesDAO hobbiesDao, EducationDAO educationDao, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO) {
+    public LibraryController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO) {
         this.userDAO = userDAO;
-        this.hobbiesDao = hobbiesDao;
-        this.educationDao = educationDao;
+        this.hobbyDAO = hobbyDAO;
+        this.educationDAO = educationDAO;
         this.skillDAO = skillDAO;
         this.projectDAO = projectDAO;
         this.experienceDAO = experienceDAO;
@@ -40,12 +40,14 @@ public class LibraryController {
 
         Optional<User> optUser = userDAO.findById((long) 1);
 
+            //TODO: add function
+
         if(optUser.isPresent()) {
 
             m.addAttribute("user",optUser.get());
-            m.addAttribute("hobbies", hobbiesDao.findAll());
-            m.addAttribute("education", educationDao.findAll());
-            m.addAttribute("skill", skillDAO.findAll());
+            m.addAttribute("hobbies", hobbyDAO.findAll());
+            m.addAttribute("education", educationDAO.findAll());
+   //         m.addAttribute("skill", skillDAO.findAll());
             m.addAttribute("project", projectDAO.findAll());
             m.addAttribute("experience", experienceDAO.findAll());
             m.addAttribute("presentation", presentationDAO.findAll());

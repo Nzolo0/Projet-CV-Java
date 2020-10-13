@@ -80,12 +80,12 @@
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                     <div class="flex-grow-1">
 
-                        <h3 class="mb-0" th:text="${exp.exp_title}"></h3>
-                        <div class="subheading mb-3" th:text="${exp.company_name}"></div>
-                        <p th:text="${exp.exp_description}"></p>
+                        <h3 class="mb-0" th:text="${exp.title}"></h3>
+                        <div class="subheading mb-3" th:text="${exp.companyName}"></div>
+                        <p th:text="${exp.description}"></p>
                     </div>
                     <div class="flex-shrink-0"><span class="text-primary"
-                                                     th:text="${exp.start_date + ' - ' + exp.end_date}"></span></div>
+                                                     th:text="${exp.startDate + ' - ' + exp.endDate}"></span></div>
                 </div>
             </tr>
         </div>
@@ -99,11 +99,11 @@
             <tr th:each="edu: ${education}">
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                     <div class="flex-grow-1">
-                        <h3 class="mb-0" th:text="${edu.edu_title}"></h3>
-                        <div class="subheading mb-3" th:text="${edu.edu_name}"></div>
+                        <h3 class="mb-0" th:text="${edu.title}"></h3>
+                        <div class="subheading mb-3" th:text="${edu.name}"></div>
                     </div>
                     <div class="flex-shrink-0"><span class="text-primary"
-                                                     th:text="${edu.start_date + ' - ' + edu.end_date}"></span></div>
+                                                     th:text="${edu.startDate + ' - ' + edu.endDate}"></span></div>
                 </div>
             </tr>
         </div>

@@ -1,7 +1,6 @@
 package io.takima.demo.DAO;
 
-import io.takima.demo.Hobbies;
-import io.takima.demo.User;
+import io.takima.demo.Hobby;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +8,5 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public interface HobbiesDAO extends CrudRepository<Hobbies, Long> {
+public interface HobbyDAO extends CrudRepository<Hobby, Long> {
 }

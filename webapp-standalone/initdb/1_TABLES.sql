@@ -13,54 +13,54 @@ create table users
     facebook TEXT
 );
 
-create table presentation
+create table presentations
 (
-    pres_id bigint auto_increment primary key,
-    pres_title TEXT,
+    id bigint auto_increment primary key,
+    title TEXT,
     description TEXT
 );
 
-create table experience
+create table experiences
 (
-    exp_id bigint auto_increment primary key,
-    exp_title TEXT,
+    id bigint auto_increment primary key,
+    title TEXT,
     company_name TEXT,
-    exp_location TEXT,
+    location TEXT,
     start_date date,
     end_date date,
-    exp_description TEXT
+    description TEXT
 );
 
-create table education
+create table educations
 (
-    ed_id bigint auto_increment primary key ,
-    edu_title TEXT,
-    edu_name TEXT,
-    edu_location TEXT,
+    id bigint auto_increment primary key ,
+    title TEXT,
+    name TEXT,
+    location TEXT,
     start_date year,
     end_date year,
-    edu_description TEXT
+    description TEXT
 );
 
 create table skills
 (
-    skill_id bigint auto_increment primary key,
-    skill_name TEXT,
-    skill_grade TEXT
+    id bigint auto_increment primary key,
+    name TEXT,
+    grade TEXT
 );
 
 create table projects
 (
-    proj_id bigint auto_increment primary key,
-    proj_title TEXT,
-    proj_date year,
-    proj_description TEXT
+    id bigint auto_increment primary key,
+    title TEXT,
+    date year,
+    description TEXT
 );
 
 create table hobbies
 (
-    hob_id bigint auto_increment primary key,
-    hob_title TEXT,
-    hob_details TEXT
+    id bigint auto_increment primary key,
+    title TEXT,
+    details TEXT
 );
 

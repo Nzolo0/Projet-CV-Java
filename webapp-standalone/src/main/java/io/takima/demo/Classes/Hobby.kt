@@ -5,24 +5,28 @@ import javax.persistence.*
 /**
  *
  */
-@Entity(name = "presentations")
-data class Presentation(
+@Entity(name = "hobbies")
+data class Hobby(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Id var id: Long?,
         @Column(name = "title") var title: String?,
-        @Column(name = "description") var description: String?
+        @Column(name = "details") var details: String?
 ) {
     constructor() : this(null, null, null)
+
+    override fun toString(): String {
+        return "Hobby(id=$id, title=$title, details=$details)"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Presentation
+        other as Hobby
 
         if (id != other.id) return false
         if (title != other.title) return false
-        if (description != other.description) return false
+        if (details != other.details) return false
 
         return true
     }
@@ -30,11 +34,7 @@ data class Presentation(
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
         result = 31 * result + (title?.hashCode() ?: 0)
-        result = 31 * result + (description?.hashCode() ?: 0)
+        result = 31 * result + (details?.hashCode() ?: 0)
         return result
-    }
-
-    override fun toString(): String {
-        return "Presentation(id=$id, title=$title, description=$description)"
     }
 }
