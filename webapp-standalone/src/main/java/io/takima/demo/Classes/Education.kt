@@ -11,7 +11,7 @@ data class Education(
         @Id var ed_id: Long?,
         @Column(name = "edu_title") var edu_title: String?,
         @Column(name = "edu_name") var edu_name: String?,
-        @Column(name = "edu_location") var edu_location: Int?,
+        @Column(name = "edu_location") var edu_location: String?,
         @Column(name = "start_date") var start_date: String?,
         @Column(name = "end_date") var end_date: String?,
         @Column(name = "edu_description") var edu_description: String?
@@ -39,7 +39,7 @@ data class Education(
         var result = ed_id?.hashCode() ?: 0
         result = 31 * result + (edu_title?.hashCode() ?: 0)
         result = 31 * result + (edu_name?.hashCode() ?: 0)
-        result = 31 * result + (edu_location ?: 0)
+        result = 31 * result + (edu_location?.hashCode() ?: 0)
         result = 31 * result + (start_date?.hashCode() ?: 0)
         result = 31 * result + (end_date?.hashCode() ?: 0)
         result = 31 * result + (edu_description?.hashCode() ?: 0)

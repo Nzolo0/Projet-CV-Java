@@ -10,5 +10,4 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface HobbiesDAO extends CrudRepository<Hobbies, Long> {
-
 }
