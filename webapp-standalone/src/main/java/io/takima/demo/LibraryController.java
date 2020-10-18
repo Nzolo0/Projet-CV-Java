@@ -3,11 +3,13 @@ import io.takima.demo.DAO.*;
 import io.takima.demo.mail.EmailServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -45,10 +47,11 @@ public class LibraryController {
     public String homePage(Model m) {
 
         Optional<User> optUser = userDAO.findById((long) 1);
+        Optional<Presentation> optPresentation = presentationDAO.findById((long) 1);
 
-            //TODO: add function
+        //TODO: add function
 
-        if(optUser.isPresent()) {
+        if(optUser.isPresent() && optPresentation.isPresent()) {
 
             m.addAttribute("user",getCurrentUser());
             m.addAttribute("hobbies", hobbyDAO.findAll());
@@ -56,7 +59,7 @@ public class LibraryController {
             m.addAttribute("skill", skillDAO.findAll());
             m.addAttribute("project", projectDAO.findAll());
             m.addAttribute("experience", experienceDAO.findAll());
-            m.addAttribute("presentation", presentationDAO.findAll());
+            m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("mail",new Mail());
 
             return "index";
@@ -68,16 +71,68 @@ public class LibraryController {
 
     @GetMapping("/admin")
     public String addUserPage(Model m) {
-        m.addAttribute("user", new User());
+        Optional<User> optUser = userDAO.findById((long) 1);
+        Optional<Presentation> optPresentation = presentationDAO.findById((long) 1);
+
+        //TODO: add function
+
+        if(optUser.isPresent() && optPresentation.isPresent()) {
+
+            m.addAttribute("user",optUser.get());
+            m.addAttribute("hobbies", hobbyDAO.findAll());
+            m.addAttribute("education", educationDAO.findAll());
+            //         m.addAttribute("skill", skillDAO.findAll());
+            m.addAttribute("project", projectDAO.findAll());
+            m.addAttribute("experience", experienceDAO.findAll());
+            m.addAttribute("presentation", optPresentation.get());
+
+            return "admin";
+        }
+        else{
+            return "404";
+        }
+    }
+
+    @PostMapping(value = "/admin")
+    public String updateUser(@ModelAttribute User user, @ModelAttribute Presentation presentation, Model m) {
+
+        user.setId((long) 1);
+
+        userDAO.save(user);
+
+        presentation.setId((long) 1);
+
+        presentationDAO.save(presentation);
+
+        m.addAttribute("user", user);
+        m.addAttribute("hobbies", hobbyDAO.findAll());
+        m.addAttribute("education", educationDAO.findAll());
+        //         m.addAttribute("skill", skillDAO.findAll());
+        m.addAttribute("project", projectDAO.findAll());
+        m.addAttribute("experience", experienceDAO.findAll());
+        m.addAttribute("presentation", presentation);
+
         return "admin";
     }
 
-    @PostMapping("/admin")
-    public RedirectView createNewUser(@ModelAttribute User user, RedirectAttributes attrs) {
-        attrs.addFlashAttribute("message", "Utilisateur ajouté avec succès");
-      //  userDAO.save(user);
-        return new RedirectView("/");
+    /*@RequestMapping(value="/admin", params={"addRow"})
+    public String addRow(final Experience experience, final BindingResult bindingResult) {
+        Experience exp = new Experience();
+        experienceDAO.save(exp);
+
+        return "admin";
     }
+
+    @RequestMapping(value="/admin", params={"removeRow"})
+    public String removeRow(
+            final Experience experience, final BindingResult bindingResult,
+            final HttpServletRequest req) {
+        final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
+        experienceDAO.delete(experience);
+        return "admin";
+    }*/
+
+
 
     @PostMapping("/contact")
     public RedirectView contactAdmin(RedirectAttributes attrs, @ModelAttribute Mail mail) throws MessagingException {

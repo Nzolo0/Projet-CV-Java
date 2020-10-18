@@ -38,6 +38,9 @@
             <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Skills</a></li>
             <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#interests">Interests</a></li>
             <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#awards">Awards</a></li>
+            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
+            <hr class="m-3"/>
+            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/admin">Admin</a></li>
         </ul>
 
 
@@ -54,17 +57,15 @@
                         </span>
             </h1>
             <div class="subheading mb-5">
-                3542 Berry Street · Cheyenne Wells, CO 80810 · (317) 585-8468 ·
-                <a href="mailto:name@email.com">name@email.com</a>
+                <span th:text="${user.address}"></span> · <span th:text="${user.phone}"></span> ·
+                <a th:href="'mailto:' + ${user.email}"><span th:text="${user.email}"></span></a>
             </div>
-            <p class="lead mb-5">I am experienced in leveraging agile frameworks to provide a robust synopsis for high
-                level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the
-                overall value proposition.</p>
+            <p class="lead mb-5" th:text="${presentation.description}"></p>
             <div class="social-icons">
-                <a class="social-icon" href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a class="social-icon" href="#"><i class="fab fa-github"></i></a>
-                <a class="social-icon" href="#"><i class="fab fa-twitter"></i></a>
-                <a class="social-icon" href="#"><i class="fab fa-facebook-f"></i></a>
+                <a class="social-icon" th:href="${user.linkedin}" th:if="${!user.linkedin.isEmpty()}"><i class="fab fa-linkedin-in"></i></a>
+                <a class="social-icon" th:href="${user.github}" th:if="${!user.github.isEmpty()}"><i class="fab fa-github"></i></a>
+                <a class="social-icon" th:href="${user.instagram}" th:if="${!user.instagram.isEmpty()}"><i class="fab fa-instagram"></i></a>
+                <a class="social-icon" th:href="${user.facebook}" th:if="${!user.facebook.isEmpty()}"><i class="fab fa-facebook-f"></i></a>
             </div>
         </div>
     </section>
@@ -211,22 +212,27 @@
             </ul>
         </div>
     </section>
-    </div>
-<div class="container">
-    <form method="post" th:action="@{/contact}" th:object="${mail}">
-        <div class="form-group">
-            <label for="senderNameInput">E-mail</label>
-            <input type="text" th:field="*{senderName}" class="form-control" id="senderNameInput" aria-describedby="senderNameHelp" placeholder="Enter your Email">
-           <!-- <small id="senderNameHelp" class="form-text text-muted">Having a first name is always more convenient.</small> -->
-        </div>
-        <div class="form-group">
-            <label for="textInput">What do you want to tell me ?</label>
-            <input type="text" th:field="*{text}" class="form-control" id="textInput" aria-describedby="textHelp" placeholder="Something like : Hello I come from takima, I would like to meet you">
-            <small id="lastNameHelp" class="form-text text-muted"></small>
-        </div>
+    <hr class="m-0"/>
+    <!-- Contact-->
+    <section class="resume-section" id="contact">
+        <div class="resume-section-content">
+            <h2 class="mb-5">Contact</h2>
+            <form method="post" th:action="@{/contact}" th:object="${mail}">
+                <div class="form-group">
+                    <label for="senderNameInput">E-mail</label>
+                    <input type="text" th:field="*{senderName}" class="form-control" id="senderNameInput" aria-describedby="senderNameHelp" placeholder="Enter your Email">
+                    <!-- <small id="senderNameHelp" class="form-text text-muted">Having a first name is always more convenient.</small> -->
+                </div>
+                <div class="form-group">
+                    <label for="textInput">What do you want to tell me ?</label>
+                    <textarea type="text" th:field="*{text}" class="form-control" id="textInput" aria-describedby="textHelp" placeholder="Something like : Hello I come from Takima, I would like to meet you"></textarea>
+                    <small id="lastNameHelp" class="form-text text-muted"></small>
+                </div>
 
-        <button type="submit" class="btn btn-primary">Envoyer</button>
-    </form>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+        </div>
+    </section>
 </div>
 
 

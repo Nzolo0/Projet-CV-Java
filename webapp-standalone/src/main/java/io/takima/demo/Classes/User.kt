@@ -18,12 +18,13 @@ data class User(
         @Column(name = "title") var title: String?,
         @Column(name = "linkedin") var linkedin: String?,
         @Column(name = "github") var github: String?,
+        @Column(name = "instagram") var instagram: String?,
         @Column(name = "facebook") var facebook: String?
 ) {
-    constructor() : this(null, null, null, null,null,null,null,null,null,null,null)
+    constructor() : this(null, null, null, null, null,null,null,null,null,null,null,null)
 
     override fun toString(): String {
-        return "User(id=$id, firstName=$firstName, lastName=$lastName, age=$age, phone=$phone, email=$email, address=$address, title=$title, linkedin=$linkedin, github=$github, facebook=$facebook)"
+        return "User(id=$id, firstName=$firstName, lastName=$lastName, age=$age, phone=$phone, email=$email, address=$address, title=$title, linkedin=$linkedin, github=$github, instagram=$instagram, facebook=$facebook)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -42,6 +43,7 @@ data class User(
         if (title != other.title) return false
         if (linkedin != other.linkedin) return false
         if (github != other.github) return false
+        if (instagram != other.instagram) return false
         if (facebook != other.facebook) return false
 
         return true
@@ -58,6 +60,7 @@ data class User(
         result = 31 * result + (title?.hashCode() ?: 0)
         result = 31 * result + (linkedin?.hashCode() ?: 0)
         result = 31 * result + (github?.hashCode() ?: 0)
+        result = 31 * result + (instagram?.hashCode() ?: 0)
         result = 31 * result + (facebook?.hashCode() ?: 0)
         return result
     }

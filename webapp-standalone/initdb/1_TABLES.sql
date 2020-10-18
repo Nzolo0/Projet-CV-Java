@@ -10,6 +10,7 @@ create table users
     title TEXT,
     linkedin TEXT,
     github TEXT,
+    instagram TEXT,
     facebook TEXT
 );
 
