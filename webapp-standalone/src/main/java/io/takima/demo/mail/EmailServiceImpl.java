@@ -27,7 +27,7 @@ public class EmailServiceImpl implements EmailService {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setFrom(NOREPLY_ADDRESS);
+        //helper.setFrom(NOREPLY_ADDRESS);
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
@@ -40,7 +40,6 @@ public class EmailServiceImpl implements EmailService {
 
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
-        thymeleafContext.setVariable(to,4);
         String htmlBody = thymeleafTemplateEngine.process("mail.html", thymeleafContext);
 
         sendHtmlMessage(to, subject, htmlBody);

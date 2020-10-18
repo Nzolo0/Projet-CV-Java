@@ -212,7 +212,22 @@
         </div>
     </section>
     </div>
+<div class="container">
+    <form method="post" th:action="@{/contact}" th:object="${mail}">
+        <div class="form-group">
+            <label for="senderNameInput">E-mail</label>
+            <input type="text" th:field="*{senderName}" class="form-control" id="senderNameInput" aria-describedby="senderNameHelp" placeholder="Enter your Email">
+           <!-- <small id="senderNameHelp" class="form-text text-muted">Having a first name is always more convenient.</small> -->
+        </div>
+        <div class="form-group">
+            <label for="textInput">What do you want to tell me ?</label>
+            <input type="text" th:field="*{text}" class="form-control" id="textInput" aria-describedby="textHelp" placeholder="Something like : Hello I come from takima, I would like to meet you">
+            <small id="lastNameHelp" class="form-text text-muted"></small>
+        </div>
 
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </form>
+</div>
 
 
 

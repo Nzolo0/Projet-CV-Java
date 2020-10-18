@@ -1,7 +1,5 @@
 package io.takima.demo;
-import io.takima.demo.Classes.MailObject;
 import io.takima.demo.DAO.*;
-import io.takima.demo.mail.EmailService;
 import io.takima.demo.mail.EmailServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,13 +50,14 @@ public class LibraryController {
 
         if(optUser.isPresent()) {
 
-            m.addAttribute("user",optUser.get());
+            m.addAttribute("user",getCurrentUser());
             m.addAttribute("hobbies", hobbyDAO.findAll());
             m.addAttribute("education", educationDAO.findAll());
             m.addAttribute("skill", skillDAO.findAll());
             m.addAttribute("project", projectDAO.findAll());
             m.addAttribute("experience", experienceDAO.findAll());
             m.addAttribute("presentation", presentationDAO.findAll());
+            m.addAttribute("mail",new Mail());
 
             return "index";
         }
@@ -80,36 +79,34 @@ public class LibraryController {
         return new RedirectView("/");
     }
 
-    @GetMapping("/contact")
-    public RedirectView contactAdmin(RedirectAttributes attrs) throws MessagingException {
+    @PostMapping("/contact")
+    public RedirectView contactAdmin(RedirectAttributes attrs, @ModelAttribute Mail mail) throws MessagingException {
 
 
         // à rajouter dans la fct pour passer en post @ModelAttribute MailObject mailObject,
-        // TODO : tout mettre dans une fonction
-        // TODO : ajouter formulaire dans index
         // TODO : ajouter ancre navbar de gauche dans index pour relier à contact
         // TODO : regarder ajax pour ne pas reload la page
         // TODO : supprimer download.html ?
-        MailObject mailObject2 = new MailObject();
-        mailObject2.setRecipientName("thymeleaf");
-        mailObject2.setSubject("SUejt");
-        mailObject2.setSenderName("renizmy");
-        mailObject2.setTo("remi.beltramini@gmail.com");
-        mailObject2.setTemplateEngine("thymeleaf");
 
-        Map<String, Object> templateModel = new HashMap<>();
-        templateModel.put("recipientName", mailObject2.getRecipientName());
-        templateModel.put("text", mailObject2.getText());
-        templateModel.put("senderName", mailObject2.getSenderName());
-
-
-        emailService.sendMessageUsingThymeleafTemplate(mailObject2.getTo(), mailObject2.getSubject(), templateModel);
-
-
-        attrs.addFlashAttribute("message", "Mail envoyé ! ");
-
-
+        sendMail(mail);
         return new RedirectView("/");
+    }
+
+    private void sendMail(Mail mail) throws MessagingException {
+        mail.setRecipientName("thymeleaf");
+        mail.setSubject("Sujet");
+        // TODO : remove  after tests mail.setTo("remi.beltramini@gmail.com");
+        mail.setTo(getCurrentUser().getEmail());
+        Map<String, Object> templateModel = new HashMap<>();
+        templateModel.put("recipientName", mail.getRecipientName());
+        templateModel.put("text", mail.getText());
+        templateModel.put("senderName", mail.getSenderName());
+        emailService.sendMessageUsingThymeleafTemplate(mail.getTo(), mail.getSubject(), templateModel);
+    }
+
+    public User getCurrentUser(){
+        // TODO : ajouter tests , erreurs etc ...
+        return userDAO.findById((long) 1).get();
     }
 
 

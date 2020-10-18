@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <body>
-<h3 style="text-align: center; color: green">
-    <span th:text="${senderName}"></span>
-    <span th:text="'Hello World !'"></span>
+<h3 style="text-align: center; color: deeppink">
+    <span th:text="${senderName} + ' Contacted You'"></span>
+    <span th:text="'Hello World ! Awesome its Working !'"></span>
+    <span th:text="${text}"></span>
 </h3>
 </body>
 </html>
