@@ -15,8 +15,8 @@ data class Experience(
         @Column(name = "start_date") var startDate: String?,
         @Column(name = "end_date") var endDate: String?,
         @Column(name = "description") var description: String?
-) {
-    constructor() : this(null,null,null,null,null,null,null)
+) : Comparable<Experience> {
+    constructor() : this(null, null, null, null, null, null, null)
 
     override fun toString(): String {
         return "Experience(id=$id, title=$title, company_name=$companyName, location=$location, start_date=$startDate, date=$endDate, description=$description)"
@@ -48,5 +48,15 @@ data class Experience(
         result = 31 * result + (endDate?.hashCode() ?: 0)
         result = 31 * result + (description?.hashCode() ?: 0)
         return result
+    }
+
+    override fun compareTo(other: Experience): Int {
+
+        if (endDate.isNullOrEmpty() && other.endDate.isNullOrEmpty())
+            return 0
+        if (endDate.isNullOrEmpty()) return -1
+        if (other.endDate.isNullOrEmpty()) return 1
+        return other.endDate!!.compareTo(endDate!!)
+
     }
 }

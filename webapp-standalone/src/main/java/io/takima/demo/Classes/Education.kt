@@ -15,8 +15,8 @@ data class Education(
         @Column(name = "start_date") var startDate: String?,
         @Column(name = "end_date") var endDate: String?,
         @Column(name = "description") var description: String?
-) {
-    constructor() : this(null, null, null, null,null,null,null)
+) : Comparable<Education> {
+    constructor() : this(null, null, null, null, null, null, null)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -50,5 +50,14 @@ data class Education(
         return "Education(ed_id=$id, edu_title=$title, edu_name=$name, edu_location=$location, start_date=$startDate, end_date=$endDate, edu_description=$description)"
     }
 
+    override fun compareTo(other: Education): Int {
+
+        if (endDate.isNullOrEmpty() && other.endDate.isNullOrEmpty())
+            return 0
+        if (endDate.isNullOrEmpty()) return -1
+        if (other.endDate.isNullOrEmpty()) return 1
+        return other.endDate!!.compareTo(endDate!!)
+
+    }
 
 }
