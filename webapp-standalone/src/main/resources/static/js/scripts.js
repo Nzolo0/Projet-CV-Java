@@ -6,6 +6,15 @@
     (function ($) {
     "use strict"; // Start of use strict
 
+        const color = readCookie("backgroundColor");
+        const color2 = readCookie("textColor");
+
+        if (color) {
+            document.body.style.backgroundColor = color;
+            if(color2){
+            document.body.style.color = color2;}
+        }
+
     // Smooth scrolling using jQuery easing
     $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {
         if (
