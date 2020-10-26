@@ -375,14 +375,17 @@ public class LibraryController {
     }
 
     private void sendMail(Mail mail) throws MessagingException {
-        mail.setRecipientName("thymeleaf");
-        mail.setSubject("Sujet");
+        //mail.setRecipientName("thymeleaf");
+        //mail.setSubject("Sujet");
         // TODO : remove  after tests mail.setTo("remi.beltramini@gmail.com");
-        mail.setTo(getCurrentUser().getEmail());
+        mail.setTo("clement.bardoux@epfedu.fr");
         Map<String, Object> templateModel = new HashMap<>();
-        templateModel.put("recipientName", mail.getRecipientName());
-        templateModel.put("text", mail.getText());
+        //templateModel.put("recipientName", mail.getRecipientName());
         templateModel.put("senderName", mail.getSenderName());
+        templateModel.put("senderMail", mail.getSenderMail());
+        templateModel.put("subject", mail.getSubject());
+        templateModel.put("text", mail.getText());
+        templateModel.put("receiverName", getCurrentUser().getLastName());
         emailService.sendMessageUsingThymeleafTemplate(mail.getTo(), mail.getSubject(), templateModel);
     }
 

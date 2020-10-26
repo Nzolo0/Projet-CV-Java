@@ -219,8 +219,17 @@
             <h2 class="mb-5">Contact</h2>
             <form method="post" th:action="@{/contact}" th:object="${mail}">
                 <div class="form-group">
-                    <label for="senderNameInput">E-mail</label>
-                    <input type="text" th:field="*{senderName}" class="form-control" id="senderNameInput" aria-describedby="senderNameHelp" placeholder="Enter your Email">
+                    <label for="senderNameInput">Name</label>
+                    <input type="text" th:field="*{senderName}" class="form-control" id="senderNameInput" aria-describedby="senderNameHelp" placeholder="Enter your Name">
+                </div>
+                <div class="form-group">
+                    <label for="senderMailInput">E-mail</label>
+                    <input type="text" th:field="*{senderMail}" class="form-control" id="senderMailInput" aria-describedby="senderMailHelp" placeholder="Enter your E-mail">
+                    <!-- <small id="senderNameHelp" class="form-text text-muted">Having a first name is always more convenient.</small> -->
+                </div>
+                <div class="form-group">
+                    <label for="senderSubjectInput">Subject</label>
+                    <input type="text" th:field="*{subject}" class="form-control" id="senderSubjectInput" aria-describedby="senderSubjectHelp" placeholder="Enter your Subject">
                     <!-- <small id="senderNameHelp" class="form-text text-muted">Having a first name is always more convenient.</small> -->
                 </div>
                 <div class="form-group">
@@ -229,7 +238,7 @@
                     <small id="lastNameHelp" class="form-text text-muted"></small>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Envoyer</button>
+                <button type="submit" class="btn btn-primary">Send</button>
             </form>
         </div>
     </section>

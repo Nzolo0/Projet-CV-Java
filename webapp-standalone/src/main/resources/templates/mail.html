@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
-<body>
-<h3 style="text-align: center; color: deeppink">
-    <span th:text="${senderName} + ' Contacted You'"></span>
-    <span th:text="'Hello World ! Awesome its Working !'"></span>
+<body style="background-color:white;">
+<h1 style="text-align: center; color: black">
+    <span th:text="'Congrats Mr ' + ${receiverName} + ', ' + ${senderName} + ' has contacted you !'"></span>
+</h1>
+<h3 style="text-align: center; color: black">
     <span th:text="${text}"></span>
+</h3>
+<h3 style="text-align: center; color: black">
+    <span th:text="'You can contact him back with this e-mail address : ' + ${senderMail}"></span>
 </h3>
 </body>
 </html>
