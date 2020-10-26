@@ -11,7 +11,7 @@ data class Skill(
         @Id var id: Long?,
         @Column(name = "name") var name: String?,
         @Column(name = "grade") var grade: String?
-) {
+) : Comparable<Skill> {
     constructor() : this(null, null, null)
 
     override fun toString(): String {
@@ -36,5 +36,15 @@ data class Skill(
         result = 31 * result + (name?.hashCode() ?: 0)
         result = 31 * result + (grade?.hashCode() ?: 0)
         return result
+    }
+
+    override fun compareTo(other: Skill): Int {
+
+        if (name.isNullOrEmpty() && other.name.isNullOrEmpty())
+            return 0
+        if (name.isNullOrEmpty()) return -1
+        if (other.name.isNullOrEmpty()) return 1
+        return name!!.compareTo(other.name!!)
+
     }
 }

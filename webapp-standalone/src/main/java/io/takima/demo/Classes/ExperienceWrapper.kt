@@ -1,8 +1,6 @@
 package io.takima.demo.Classes
 
 import io.takima.demo.Experience
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ExperienceWrapper {

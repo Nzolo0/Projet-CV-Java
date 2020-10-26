@@ -1,6 +1,5 @@
 package io.takima.demo;
-import io.takima.demo.Classes.EducationWrapper;
-import io.takima.demo.Classes.ExperienceWrapper;
+import io.takima.demo.Classes.*;
 import io.takima.demo.DAO.*;
 import io.takima.demo.mail.EmailServiceImpl;
 import org.jetbrains.annotations.NotNull;
@@ -30,10 +29,11 @@ public class LibraryController {
     private final EmailServiceImpl emailService;
     private ArrayList<Experience> experienceList;
     private ArrayList<Education> educationList;
+    private ArrayList<Skill> skillList;
+    private ArrayList<Hobby> hobbyList;
+    private ArrayList<Project> projectList;
 
-
-
-    public LibraryController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, EmailServiceImpl emailService, ArrayList<Experience> experienceList, ArrayList<Education> educationList) {
+    public LibraryController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, EmailServiceImpl emailService, ArrayList<Experience> experienceList, ArrayList<Education> educationList, ArrayList<Skill> skillList, ArrayList<Hobby> hobbyList, ArrayList<Project> projectList) {
         this.userDAO = userDAO;
         this.hobbyDAO = hobbyDAO;
         this.educationDAO = educationDAO;
@@ -44,6 +44,9 @@ public class LibraryController {
         this.emailService = emailService;
         this.experienceList = experienceList;
         this.educationList = educationList;
+        this.skillList = skillList;
+        this.hobbyList = hobbyList;
+        this.projectList = projectList;
     }
 
     @GetMapping
@@ -75,12 +78,12 @@ public class LibraryController {
     @GetMapping("/admin")
     public String addUserPage(Model m) {
 
-        sendAttributes(m);
+        sendAttributesAdmin(m);
 
         return "admin";
     }
 
-    private void sendAttributes(Model m) {
+    private void sendAttributesAdmin(Model m) {
         Optional<User> optUser = userDAO.findById((long) 1);
         Optional<Presentation> optPresentation = presentationDAO.findById((long) 1);
 
@@ -89,14 +92,12 @@ public class LibraryController {
         if(optUser.isPresent() && optPresentation.isPresent()) {
 
             m.addAttribute("user", optUser.get());
+            m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("expWrapper", getExperienceWrapper());
             m.addAttribute("eduWrapper", getEducationWrapper());
-            m.addAttribute("hobbies", hobbyDAO.findAll());
-            m.addAttribute("education", sortEducations());
-            //         m.addAttribute("skill", skillDAO.findAll());
-            m.addAttribute("project", projectDAO.findAll());
-            m.addAttribute("experience", sortExperiences());
-            m.addAttribute("presentation", optPresentation.get());
+            m.addAttribute("skillWrapper", getSkillWrapper());
+            m.addAttribute("hobbyWrapper", getHobbyWrapper());
+            m.addAttribute("projectWrapper", getProjectWrapper());
 
         }
     }
@@ -116,6 +117,30 @@ public class LibraryController {
         eduWrapper.setEducationList(educationList);
         return eduWrapper;
     }
+    
+    @NotNull
+    private SkillWrapper getSkillWrapper() {
+        skillList = (ArrayList<Skill>) sortSkills();
+        SkillWrapper skillWrapper = new SkillWrapper();
+        skillWrapper.setSkillList(skillList);
+        return skillWrapper;
+    }
+    
+    @NotNull
+    private HobbyWrapper getHobbyWrapper() {
+        hobbyList = (ArrayList<Hobby>) sortHobbies();
+        HobbyWrapper hobbyWrapper = new HobbyWrapper();
+        hobbyWrapper.setHobbyList(hobbyList);
+        return hobbyWrapper;
+    }
+
+    @NotNull
+    private ProjectWrapper getProjectWrapper() {
+        projectList = (ArrayList<Project>) sortProjects();
+        ProjectWrapper projectWrapper = new ProjectWrapper();
+        projectWrapper.setProjectList(projectList);
+        return projectWrapper;
+    }
 
     @PostMapping( value="/admin", params="submitUser")
     public String updateUser(@ModelAttribute User user, @ModelAttribute Presentation presentation, Model m) {
@@ -129,14 +154,12 @@ public class LibraryController {
         presentationDAO.save(presentation);
 
         m.addAttribute("user", user);
-        m.addAttribute("hobbies", hobbyDAO.findAll());
+        m.addAttribute("presentation", presentation);
         m.addAttribute("expWrapper", getExperienceWrapper());
         m.addAttribute("eduWrapper", getEducationWrapper());
-        m.addAttribute("education", sortEducations());
-        //         m.addAttribute("skill", skillDAO.findAll());
-        m.addAttribute("project", projectDAO.findAll());
-        m.addAttribute("experience", sortExperiences());
-        m.addAttribute("presentation", presentation);
+        m.addAttribute("skillWrapper", getSkillWrapper());
+        m.addAttribute("hobbyWrapper", getHobbyWrapper());
+        m.addAttribute("projectWrapper", getProjectWrapper());
 
         return "redirect:/admin#about";
     }
@@ -146,7 +169,7 @@ public class LibraryController {
 
         experienceDAO.saveAll(expWrapper.getExperienceList());
 
-        sendAttributes(m);
+        sendAttributesAdmin(m);
 
         return "redirect:/admin#experience";
     }
@@ -156,7 +179,7 @@ public class LibraryController {
 
         experienceDAO.deleteById(expId);
 
-        sendAttributes(m);
+        sendAttributesAdmin(m);
 
         return "redirect:/admin#experience";
     }
@@ -166,7 +189,7 @@ public class LibraryController {
 
         experienceDAO.save(new Experience());
 
-        sendAttributes(m);
+        sendAttributesAdmin(m);
 
         return "redirect:/admin#experience";
     }
@@ -176,7 +199,7 @@ public class LibraryController {
 
         educationDAO.saveAll(eduWrapper.getEducationList());
 
-        sendAttributes(m);
+        sendAttributesAdmin(m);
 
         return "redirect:/admin#education";
     }
@@ -186,7 +209,7 @@ public class LibraryController {
 
         educationDAO.deleteById(eduId);
 
-        sendAttributes(m);
+        sendAttributesAdmin(m);
 
         return "redirect:/admin#education";
     }
@@ -196,9 +219,99 @@ public class LibraryController {
 
         educationDAO.save(new Education());
 
-        sendAttributes(m);
+        sendAttributesAdmin(m);
 
         return "redirect:/admin#education";
+    }
+
+    @PostMapping( value="/admin", params="submitSkill")
+    public String updateSkill(@ModelAttribute SkillWrapper skillWrapper, Model m) {
+
+        skillDAO.saveAll(skillWrapper.getSkillList());
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#skills";
+    }
+
+    @PostMapping( value="/admin", params="removeSkill")
+    public String deleteSkill(@RequestParam Long skillId, Model m) {
+
+        skillDAO.deleteById(skillId);
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#skills";
+    }
+
+    @PostMapping( value="/admin", params="addSkill")
+    public String addSkill(Model m) {
+
+        skillDAO.save(new Skill());
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#skills";
+    }
+    
+    @PostMapping( value="/admin", params="submitHobby")
+    public String updateHobby(@ModelAttribute HobbyWrapper HobbyWrapper, Model m) {
+
+        hobbyDAO.saveAll(HobbyWrapper.getHobbyList());
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#hobbies";
+    }
+
+    @PostMapping( value="/admin", params="removeHobby")
+    public String deleteHobby(@RequestParam Long hobbyId, Model m) {
+
+        hobbyDAO.deleteById(hobbyId);
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#hobbies";
+    }
+
+    @PostMapping( value="/admin", params="addHobby")
+    public String addHobby(Model m) {
+
+        hobbyDAO.save(new Hobby());
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#hobbies";
+    }
+
+    @PostMapping( value="/admin", params="submitProject")
+    public String updateProject(@ModelAttribute ProjectWrapper ProjectWrapper, Model m) {
+
+        projectDAO.saveAll(ProjectWrapper.getProjectList());
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#projects";
+    }
+
+    @PostMapping( value="/admin", params="removeProject")
+    public String deleteProject(@RequestParam Long projectId, Model m) {
+
+        projectDAO.deleteById(projectId);
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#projects";
+    }
+
+    @PostMapping( value="/admin", params="addProject")
+    public String addProject(Model m) {
+
+        projectDAO.save(new Project());
+
+        sendAttributesAdmin(m);
+
+        return "redirect:/admin#projects";
     }
 
 
@@ -220,6 +333,32 @@ public class LibraryController {
         return educations;
     }
 
+    public List<Skill> sortSkills() {
+        List<Skill> skills = new ArrayList<>();
+
+        skillDAO.findAll().forEach(skills::add);
+
+        Collections.sort(skills);
+        return skills;
+    }
+
+    public List<Hobby> sortHobbies() {
+        List<Hobby> hobbies = new ArrayList<>();
+
+        hobbyDAO.findAll().forEach(hobbies::add);
+
+        Collections.sort(hobbies);
+        return hobbies;
+    }
+
+    public List<Project> sortProjects() {
+        List<Project> projects = new ArrayList<>();
+
+        projectDAO.findAll().forEach(projects::add);
+
+        Collections.sort(projects);
+        return projects;
+    }
 
 
     @PostMapping("/contact")

@@ -12,7 +12,7 @@ data class Project(
         @Column(name = "title") var title: String?,
         @Column(name = "date") var date: String?,
         @Column(name = "description") var description: String?
-) {
+) : Comparable<Project> {
     constructor() : this(null, null, null, null)
 
     override fun equals(other: Any?): Boolean {
@@ -39,5 +39,15 @@ data class Project(
 
     override fun toString(): String {
         return "Projects(id=$id, title=$title, date=$date, description=$description)"
+    }
+
+    override fun compareTo(other: Project): Int {
+
+        if (date.isNullOrEmpty() && other.date.isNullOrEmpty())
+            return 0
+        if (date.isNullOrEmpty()) return -1
+        if (other.date.isNullOrEmpty()) return 1
+        return other.date!!.compareTo(date!!)
+
     }
 }

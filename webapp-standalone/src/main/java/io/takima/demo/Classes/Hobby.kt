@@ -11,7 +11,7 @@ data class Hobby(
         @Id var id: Long?,
         @Column(name = "title") var title: String?,
         @Column(name = "details") var details: String?
-) {
+) :Comparable<Hobby> {
     constructor() : this(null, null, null)
 
     override fun toString(): String {
@@ -36,5 +36,15 @@ data class Hobby(
         result = 31 * result + (title?.hashCode() ?: 0)
         result = 31 * result + (details?.hashCode() ?: 0)
         return result
+    }
+
+    override fun compareTo(other: Hobby): Int {
+
+        if (title.isNullOrEmpty() && other.title.isNullOrEmpty())
+            return 0
+        if (title.isNullOrEmpty()) return -1
+        if (other.title.isNullOrEmpty()) return 1
+        return title!!.compareTo(other.title!!)
+
     }
 }
