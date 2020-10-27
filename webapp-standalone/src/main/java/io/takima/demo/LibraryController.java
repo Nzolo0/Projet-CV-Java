@@ -1,4 +1,7 @@
 package io.takima.demo;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import io.takima.demo.Classes.*;
 import io.takima.demo.DAO.*;
 import io.takima.demo.mail.EmailServiceImpl;
@@ -11,6 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.mail.MessagingException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -73,6 +77,22 @@ public class LibraryController {
         else{
             return "404";
         }
+    }
+
+    @GetMapping("/login")
+    public String loginPage(Model m) {
+
+            return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginSubmit(@RequestParam String inputEmail, @RequestParam String inputPassword) throws Exception {
+
+        String token = FireAuth.getInstance().auth(inputEmail, inputPassword);
+        System.out.println( FirebaseAuth.getInstance().verifyIdToken(token));
+
+
+        return "login";
     }
 
     @GetMapping("/admin")
@@ -143,7 +163,7 @@ public class LibraryController {
     }
 
     @PostMapping( value="/admin", params="submitUser")
-    public String updateUser(@ModelAttribute User user, @ModelAttribute Presentation presentation, Model m) {
+    public String updateUser(@ModelAttribute User user, @ModelAttribute Presentation presentation, Model m) throws ExecutionException, InterruptedException {
 
         user.setId((long) 1);
 
@@ -160,6 +180,9 @@ public class LibraryController {
         m.addAttribute("skillWrapper", getSkillWrapper());
         m.addAttribute("hobbyWrapper", getHobbyWrapper());
         m.addAttribute("projectWrapper", getProjectWrapper());
+
+        FireService top = new FireService();
+        top.savePatientDetails(user);
 
         return "redirect:/admin#about";
     }
