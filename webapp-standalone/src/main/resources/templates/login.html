@@ -21,22 +21,7 @@
 	<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
 
-	<script>
-		// Your web app's Firebase configuration
-		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-		var firebaseConfig = {
-			apiKey: "AIzaSyC86wxnQSX5D-Js93gEF2eQaBwlX0-Bg5o",
-			authDomain: "onlinecv-48187.firebaseapp.com",
-			databaseURL: "https://onlinecv-48187.firebaseio.com",
-			projectId: "onlinecv-48187",
-			storageBucket: "onlinecv-48187.appspot.com",
-			messagingSenderId: "611710915242",
-			appId: "1:611710915242:web:36933bd9ae03fb479376d3",
-			measurementId: "G-DK69P1SZC0"
-		};
-		// Initialize Firebase
-		firebase.initializeApp(firebaseConfig);
-	</script>
+	<script th:src="@{js/configFirebase.js}"></script>
 
 </head>
 
@@ -48,7 +33,7 @@
                 <span class="d-block d-lg-none">
                 </span>
 		<span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2"
-											 src="assets/img/profile.jpg" alt=""/></span>
+											 th:src="${files.url}" alt=""/></span>
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
@@ -72,7 +57,7 @@
 <div class="container-fluid p-0">
 <form name="signInForm"  class="form-signin" method="post" th:action="@{/login}">
 	<div id="dangerAlert" class="alert alert-danger" role="alert" hidden>
-		This is a success alert—check it out!
+		The email and password don't match. Please try again.
 	</div>
 	<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 	<div class="form-group">
@@ -88,8 +73,7 @@
 			<input type="checkbox" value="remember-me"> Remember me
 		</label>
 	</div>
-	<button hidden class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-	<input type="button" class="btn btn-lg btn-primary btn-block" value="sdfgh" onclick="login()">Sign in</input>
+	<input type="button" class="btn btn-lg btn-primary btn-block" value="Sign in" onclick="login()">
 
 </form>
 
@@ -97,19 +81,36 @@
 
 <script>
 	function login() {
-		const connect = firebase
+
+		firebase
 				.auth()
 				.signInWithEmailAndPassword(document.getElementById("inputEmail").value, document.getElementById("inputPassword").value)
-				.catch(function (error) {
-					// Handle Errors here.
-					console.log(error.code);
-					console.log(error.message);
+				.catch(error => {
+
+					switch (error.code) {
+						case 'auth/wrong-password':
+							document.getElementById('dangerAlert').textContent = error.message;
+							break;
+						case 'auth/user-not-found':
+							document.getElementById('dangerAlert').textContent = error.message;
+							break;
+						default:
+							console.log(error.code);
+							console.log(error.message);
+							document.getElementById('dangerAlert').textContent = error.message;
+							break;
+					}
 					document.getElementById('dangerAlert').hidden = false;
 					// ...
 				});
 
-		if (connect.uid != null)
-			document.forms["signInForm"].submit();
+		firebase.auth().onAuthStateChanged(function(user) {
+			if (user) {
+				document.forms["signInForm"].submit();
+			}
+		}, function(error) {
+			console.log(error);
+		});
 
 
 	}

@@ -1,4 +1,4 @@
-package io.takima.demo.Classes;
+package io.takima.demo.firebase;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,7 +24,7 @@ public class FireAuth {
     private static FireAuth instance = null;
 
     protected FireAuth() {
-        firebaseKey = "AIzaSyC86wxnQSX5D-Js93gEF2eQaBwlX0-Bg5o";
+        firebaseKey = "AIzaSyB3FAYoMMFpObEahDK0T2e6CaTyBXxi5YM";
     }
 
     public static FireAuth getInstance() {

@@ -1,20 +1,21 @@
 package io.takima.demo;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.UserRecord;
 import io.takima.demo.Classes.*;
 import io.takima.demo.DAO.*;
+import io.takima.demo.files.FileStorageService;
+import io.takima.demo.firebase.FireAuth;
 import io.takima.demo.mail.EmailServiceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.mail.MessagingException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -30,6 +31,7 @@ public class LibraryController {
     private final ProjectDAO projectDAO;
     private final ExperienceDAO experienceDAO;
     private final PresentationDAO presentationDAO;
+    private final FileStorageService fileStorageService;
     private final EmailServiceImpl emailService;
     private ArrayList<Experience> experienceList;
     private ArrayList<Education> educationList;
@@ -39,7 +41,7 @@ public class LibraryController {
 
     private String token = null;
 
-    public LibraryController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, EmailServiceImpl emailService, ArrayList<Experience> experienceList, ArrayList<Education> educationList, ArrayList<Skill> skillList, ArrayList<Hobby> hobbyList, ArrayList<Project> projectList) {
+    public LibraryController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, FileStorageService fileStorageService, EmailServiceImpl emailService, ArrayList<Experience> experienceList, ArrayList<Education> educationList, ArrayList<Skill> skillList, ArrayList<Hobby> hobbyList, ArrayList<Project> projectList) {
         this.userDAO = userDAO;
         this.hobbyDAO = hobbyDAO;
         this.educationDAO = educationDAO;
@@ -47,6 +49,7 @@ public class LibraryController {
         this.projectDAO = projectDAO;
         this.experienceDAO = experienceDAO;
         this.presentationDAO = presentationDAO;
+        this.fileStorageService = fileStorageService;
         this.emailService = emailService;
         this.experienceList = experienceList;
         this.educationList = educationList;
@@ -67,9 +70,10 @@ public class LibraryController {
         Optional<User> optUser = userDAO.findById((long) 1);
         Optional<Presentation> optPresentation = presentationDAO.findById((long) 1);
 
-        //TODO: add function
+        List<ResponseFile> files = collectFilesUrl();
 
-        if(optUser.isPresent() && optPresentation.isPresent()) {
+
+        if(optUser.isPresent() && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
             m.addAttribute("user",getCurrentUser());
             m.addAttribute("hobbies", hobbyDAO.findAll());
@@ -79,13 +83,43 @@ public class LibraryController {
             m.addAttribute("experience", sortExperiences());
             m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("mail",new Mail());
+            m.addAttribute("files", files.stream().findFirst().get());
         }
+    }
+
+    @NotNull
+    private List<ResponseFile> collectFilesUrl() {
+        return fileStorageService.getAllFiles().map(dbFile -> {
+            String fileDownloadUri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/files/")
+                    .path(dbFile.getId())
+                    .toUriString();
+
+            return new ResponseFile(
+                    dbFile.getName(),
+                    fileDownloadUri,
+                    dbFile.getType(),
+                    dbFile.getData().length);
+        }).collect(Collectors.toList());
     }
 
     @GetMapping("/login")
     public String loginPage(Model m) {
 
+        List<ResponseFile> files = collectFilesUrl();
+
+        if(files.stream().findFirst().isPresent()) {
+
+            m.addAttribute("files", files.stream().findFirst().get());
+        }
+
+        if (token == null || token.trim().isEmpty()) {
             return "login";
+        } else {
+
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/test")
@@ -94,13 +128,11 @@ public class LibraryController {
     }
 
     @PostMapping("/login")
-    public String loginSubmit(@RequestParam String inputEmail, @RequestParam String inputPassword, Model m) throws Exception {
+    public String loginSubmit(@RequestParam String inputEmail, @RequestParam String inputPassword) throws Exception {
 
         token = FireAuth.getInstance().auth(inputEmail, inputPassword);
 
-        System.out.println(token);
-
-        if (token == null) {
+        if (token == null || token.trim().isEmpty()) {
             return "login";
         } else {
 
@@ -111,7 +143,7 @@ public class LibraryController {
     @GetMapping("/admin")
     public String addUserPage(Model m) {
 
-        if (token == null) {
+        if (token == null || token.trim().isEmpty()) {
             return "redirect:/login";
         } else {
             sendAttributesAdmin(m);
@@ -124,9 +156,9 @@ public class LibraryController {
         Optional<User> optUser = userDAO.findById((long) 1);
         Optional<Presentation> optPresentation = presentationDAO.findById((long) 1);
 
-        //TODO: add function
+        List<ResponseFile> files = collectFilesUrl();
 
-        if(optUser.isPresent() && optPresentation.isPresent()) {
+        if(optUser.isPresent() && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
             m.addAttribute("user", optUser.get());
             m.addAttribute("presentation", optPresentation.get());
@@ -135,6 +167,7 @@ public class LibraryController {
             m.addAttribute("skillWrapper", getSkillWrapper());
             m.addAttribute("hobbyWrapper", getHobbyWrapper());
             m.addAttribute("projectWrapper", getProjectWrapper());
+            m.addAttribute("files", files.stream().findFirst().get());
 
         }
     }
@@ -146,22 +179,24 @@ public class LibraryController {
     }
 
     @PostMapping( value="/", params="signOut")
-    public String signOutIndex(@RequestParam String tok, Model m) throws Exception {
+    public String signOutIndex(@RequestParam String tok) {
 
             token = tok;
+            System.out.println(tok);
 
             return "redirect:/";
 
     }
 
     @PostMapping( value="/admin", params="signOut")
-    public String signOutAdmin(@RequestParam String tok, Model m) throws Exception {
+    public String signOutAdmin(@RequestParam String tok) {
 
             token = tok;
-        System.out.println(tok);
+            System.out.println(tok);
 
             return "redirect:/";
     }
+
 
     @PostMapping( value="/admin", params="submitUser")
     public String updateUser(@ModelAttribute User user, @ModelAttribute Presentation presentation, Model m) throws ExecutionException, InterruptedException {

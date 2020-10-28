@@ -1,3 +1,5 @@
 .idea/
 
 webapp-standalone/src/main/resources/application.properties
+
+webapp-standalone/src/main/java/io/takima/demo/onlinecv-83159-firebase-adminsdk-nofc8-1f5165cafe.json

@@ -1,4 +1,4 @@
-package io.takima.demo.Classes;
+package io.takima.demo.firebase;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,11 +24,11 @@ public class FirebaseConfig {
     @PostConstruct
     public void initialize() {
         try {
-            FileInputStream refreshToken = new FileInputStream("src/main/java/io/takima/demo/onlinecv-48187-firebase-adminsdk-ayuea-9e23865800.json");
+            FileInputStream refreshToken = new FileInputStream("src/main/java/io/takima/demo/onlinecv-83159-firebase-adminsdk-nofc8-1f5165cafe.json");
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(refreshToken))
-                    .setDatabaseUrl("https://onlinecv-48187.firebaseio.com/")
+                    .setDatabaseUrl("https://onlinecv-83159.firebaseio.com/")
                     .build();
 
             FirebaseApp defaultApp = FirebaseApp.initializeApp(options);

@@ -65,3 +65,11 @@ create table hobbies
     details TEXT
 );
 
+create table files
+(
+    id varchar(254) primary key,
+    name TEXT,
+    type TEXT,
+    data LONGBLOB
+);
+
