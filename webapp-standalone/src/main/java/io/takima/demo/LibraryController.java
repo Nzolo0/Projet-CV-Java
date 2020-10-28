@@ -37,6 +37,8 @@ public class LibraryController {
     private ArrayList<Hobby> hobbyList;
     private ArrayList<Project> projectList;
 
+    private String token = null;
+
     public LibraryController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, EmailServiceImpl emailService, ArrayList<Experience> experienceList, ArrayList<Education> educationList, ArrayList<Skill> skillList, ArrayList<Hobby> hobbyList, ArrayList<Project> projectList) {
         this.userDAO = userDAO;
         this.hobbyDAO = hobbyDAO;
@@ -56,6 +58,12 @@ public class LibraryController {
     @GetMapping
     public String homePage(Model m) {
 
+        sendAttributesIndex(m);
+
+        return "index";
+    }
+
+    private void sendAttributesIndex(Model m) {
         Optional<User> optUser = userDAO.findById((long) 1);
         Optional<Presentation> optPresentation = presentationDAO.findById((long) 1);
 
@@ -71,11 +79,6 @@ public class LibraryController {
             m.addAttribute("experience", sortExperiences());
             m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("mail",new Mail());
-
-            return "index";
-        }
-        else{
-            return "404";
         }
     }
 
@@ -85,22 +88,36 @@ public class LibraryController {
             return "login";
     }
 
+    @GetMapping("/test")
+    public String testPage() {
+        return "test";
+    }
+
     @PostMapping("/login")
-    public String loginSubmit(@RequestParam String inputEmail, @RequestParam String inputPassword) throws Exception {
+    public String loginSubmit(@RequestParam String inputEmail, @RequestParam String inputPassword, Model m) throws Exception {
 
-        String token = FireAuth.getInstance().auth(inputEmail, inputPassword);
-        System.out.println( FirebaseAuth.getInstance().verifyIdToken(token));
+        token = FireAuth.getInstance().auth(inputEmail, inputPassword);
 
+        System.out.println(token);
 
-        return "login";
+        if (token == null) {
+            return "login";
+        } else {
+
+            return "redirect:/admin";
+        }
     }
 
     @GetMapping("/admin")
     public String addUserPage(Model m) {
 
-        sendAttributesAdmin(m);
+        if (token == null) {
+            return "redirect:/login";
+        } else {
+            sendAttributesAdmin(m);
 
-        return "admin";
+            return "admin";
+        }
     }
 
     private void sendAttributesAdmin(Model m) {
@@ -122,44 +139,28 @@ public class LibraryController {
         }
     }
 
-    @NotNull
-    private ExperienceWrapper getExperienceWrapper() {
-        experienceList = (ArrayList<Experience>) sortExperiences();
-        ExperienceWrapper expWrapper = new ExperienceWrapper();
-        expWrapper.setExperienceList(experienceList);
-        return expWrapper;
+    @PostMapping( value="/", params="signIn")
+    public String signInIndex() {
+
+        return "redirect:/login";
     }
 
-    @NotNull
-    private EducationWrapper getEducationWrapper() {
-        educationList = (ArrayList<Education>) sortEducations();
-        EducationWrapper eduWrapper = new EducationWrapper();
-        eduWrapper.setEducationList(educationList);
-        return eduWrapper;
-    }
-    
-    @NotNull
-    private SkillWrapper getSkillWrapper() {
-        skillList = (ArrayList<Skill>) sortSkills();
-        SkillWrapper skillWrapper = new SkillWrapper();
-        skillWrapper.setSkillList(skillList);
-        return skillWrapper;
-    }
-    
-    @NotNull
-    private HobbyWrapper getHobbyWrapper() {
-        hobbyList = (ArrayList<Hobby>) sortHobbies();
-        HobbyWrapper hobbyWrapper = new HobbyWrapper();
-        hobbyWrapper.setHobbyList(hobbyList);
-        return hobbyWrapper;
+    @PostMapping( value="/", params="signOut")
+    public String signOutIndex(@RequestParam String tok, Model m) throws Exception {
+
+            token = tok;
+
+            return "redirect:/";
+
     }
 
-    @NotNull
-    private ProjectWrapper getProjectWrapper() {
-        projectList = (ArrayList<Project>) sortProjects();
-        ProjectWrapper projectWrapper = new ProjectWrapper();
-        projectWrapper.setProjectList(projectList);
-        return projectWrapper;
+    @PostMapping( value="/admin", params="signOut")
+    public String signOutAdmin(@RequestParam String tok, Model m) throws Exception {
+
+            token = tok;
+        System.out.println(tok);
+
+            return "redirect:/";
     }
 
     @PostMapping( value="/admin", params="submitUser")
@@ -180,9 +181,6 @@ public class LibraryController {
         m.addAttribute("skillWrapper", getSkillWrapper());
         m.addAttribute("hobbyWrapper", getHobbyWrapper());
         m.addAttribute("projectWrapper", getProjectWrapper());
-
-        FireService top = new FireService();
-        top.savePatientDetails(user);
 
         return "redirect:/admin#about";
     }
@@ -337,6 +335,45 @@ public class LibraryController {
         return "redirect:/admin#projects";
     }
 
+    @NotNull
+    private ExperienceWrapper getExperienceWrapper() {
+        experienceList = (ArrayList<Experience>) sortExperiences();
+        ExperienceWrapper expWrapper = new ExperienceWrapper();
+        expWrapper.setExperienceList(experienceList);
+        return expWrapper;
+    }
+
+    @NotNull
+    private EducationWrapper getEducationWrapper() {
+        educationList = (ArrayList<Education>) sortEducations();
+        EducationWrapper eduWrapper = new EducationWrapper();
+        eduWrapper.setEducationList(educationList);
+        return eduWrapper;
+    }
+
+    @NotNull
+    private SkillWrapper getSkillWrapper() {
+        skillList = (ArrayList<Skill>) sortSkills();
+        SkillWrapper skillWrapper = new SkillWrapper();
+        skillWrapper.setSkillList(skillList);
+        return skillWrapper;
+    }
+
+    @NotNull
+    private HobbyWrapper getHobbyWrapper() {
+        hobbyList = (ArrayList<Hobby>) sortHobbies();
+        HobbyWrapper hobbyWrapper = new HobbyWrapper();
+        hobbyWrapper.setHobbyList(hobbyList);
+        return hobbyWrapper;
+    }
+
+    @NotNull
+    private ProjectWrapper getProjectWrapper() {
+        projectList = (ArrayList<Project>) sortProjects();
+        ProjectWrapper projectWrapper = new ProjectWrapper();
+        projectWrapper.setProjectList(projectList);
+        return projectWrapper;
+    }
 
     public List<Experience> sortExperiences() {
         List<Experience> experiences = new ArrayList<>();

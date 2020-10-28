@@ -24,7 +24,7 @@ public class FireAuth {
     private static FireAuth instance = null;
 
     protected FireAuth() {
-        firebaseKey = "YOUR FIREBASE KEY HERE";
+        firebaseKey = "AIzaSyC86wxnQSX5D-Js93gEF2eQaBwlX0-Bg5o";
     }
 
     public static FireAuth getInstance() {
