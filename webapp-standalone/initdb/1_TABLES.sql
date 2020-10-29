@@ -38,8 +38,8 @@ create table educations
     title TEXT,
     name TEXT,
     location TEXT,
-    start_date year,
-    end_date year,
+    start_date Varchar(4),
+    end_date Varchar(4),
     description TEXT
 );
 
@@ -54,7 +54,7 @@ create table projects
 (
     id bigint auto_increment primary key,
     title TEXT,
-    date year,
+    date Varchar(4),
     description TEXT
 );
 
