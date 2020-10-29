@@ -238,11 +238,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="eduStartDate">Start date</label>
-                                    <input type="date" th:field="*{educationList[__${eduStat.index}__].startDate}" class="form-control" id="eduStartDate" placeholder="Enter the start date">
+                                    <input type="text" th:field="*{educationList[__${eduStat.index}__].startDate}" class="form-control" id="eduStartDate" placeholder="Enter the start date">
                                 </div>
                                 <div class="form-group">
                                     <label for="eduEndDate">End Date</label>
-                                    <input type="date" th:field="*{educationList[__${eduStat.index}__].endDate}" class="form-control" id="eduEndDate" placeholder="Enter the end date">
+                                    <input type="text" th:field="*{educationList[__${eduStat.index}__].endDate}" class="form-control" id="eduEndDate" placeholder="Enter the end date">
                                 </div>
                             </div>
                             <input type="hidden" th:field="*{educationList[__${eduStat.index}__].id}">
@@ -359,6 +359,10 @@
                                 <div class="form-group">
                                     <label for="ProjectDetails">Details</label>
                                     <textarea type="text" th:field="*{projectList[__${projStat.index}__].description}" class="form-control" id="ProjectDetails" placeholder="Enter the details"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="projDate">Year</label>
+                                    <input type="text" th:field="*{projectList[__${projStat.index}__].date}" class="form-control" id="projDate" placeholder="Enter the year">
                                 </div>
                             </div>
                             <input type="hidden" th:field="*{projectList[__${projStat.index}__].id}">
