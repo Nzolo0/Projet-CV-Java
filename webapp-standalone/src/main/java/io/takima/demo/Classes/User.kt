@@ -65,4 +65,10 @@ data class User(
         return result
     }
 
+    fun isValid():Boolean {
+
+        return !(email.isNullOrEmpty())
+
+    }
+
 }
