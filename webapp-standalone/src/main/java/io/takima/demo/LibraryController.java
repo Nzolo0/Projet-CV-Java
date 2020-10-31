@@ -1,4 +1,5 @@
 package io.takima.demo;
+import ch.qos.logback.core.net.SyslogOutputStream;
 import io.takima.demo.Classes.*;
 import io.takima.demo.DAO.*;
 import io.takima.demo.files.FileStorageService;
@@ -33,6 +34,7 @@ public class LibraryController {
     private final PresentationDAO presentationDAO;
     private final FileStorageService fileStorageService;
     private final EmailServiceImpl emailService;
+
     private ArrayList<Experience> experienceList;
     private ArrayList<Education> educationList;
     private ArrayList<Skill> skillList;
@@ -67,13 +69,15 @@ public class LibraryController {
     }
 
     private void sendAttributesIndex(Model m) {
-        Optional<User> optUser = userDAO.findById((long) 1);
-        Optional<Presentation> optPresentation = presentationDAO.findById((long) 1);
+
+        // TODO : change it
+       // Optional<User> optUser = userDAO.findById((long) 1);
+        Optional<Presentation> optPresentation = Optional.ofNullable(presentationDAO.findAll().iterator().next());
 
         List<ResponseFile> files = collectFilesUrl();
 
 
-        if(optUser.isPresent() && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
+        if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
             m.addAttribute("user",getCurrentUser());
             m.addAttribute("hobbies", hobbyDAO.findAll());
@@ -153,14 +157,15 @@ public class LibraryController {
     }
 
     private void sendAttributesAdmin(Model m) {
-        Optional<User> optUser = userDAO.findById((long) 1);
-        Optional<Presentation> optPresentation = presentationDAO.findById((long) 1);
+        // todo: change it
+        //Optional<User> optUser = userDAO.findById((long) 1);
+        Optional<Presentation> optPresentation = Optional.ofNullable(presentationDAO.findAll().iterator().next());
 
         List<ResponseFile> files = collectFilesUrl();
 
-        if(optUser.isPresent() && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
-
-            m.addAttribute("user", optUser.get());
+        //if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
+            if(true && true && files.stream().findFirst().isPresent()) {
+            m.addAttribute("user", getCurrentUser());
             m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("expWrapper", getExperienceWrapper());
             m.addAttribute("eduWrapper", getEducationWrapper());
@@ -486,7 +491,14 @@ public class LibraryController {
 
     public User getCurrentUser(){
         // TODO : ajouter tests , erreurs etc ...
-        return userDAO.findById((long) 1).get();
+        User user = userDAO.findAll().iterator().next();
+        System.out.println(user.toString());
+        return user;
+    }
+
+    @GetMapping("/uploadP")
+    public String UploadPage(Model m) {
+        return "upload";
     }
 
 
