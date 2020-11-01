@@ -103,7 +103,7 @@
     <div id="idSignedIn" style="color: #FFFFFF"></div>
     <a class="navbar-brand js-scroll-trigger" href="#page-top">
                 <span class="d-block d-lg-none">
-                    <span th:text="${user.firstName}"></span>F
+                    <span th:utext="${user.firstName}"></span>F
                 </span>
         <span th:if="${files != null}" class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2"
                                              th:src="${files?.url}" alt=""/></span>
@@ -141,7 +141,7 @@
                 <span th:utext="${user.address}"></span> · <span th:text="${user.phone}"></span> ·
                 <a th:href="'mailto:' + ${user.email}"><span th:utext="${user.email}"></span></a>
             </div>
-            <p class="lead mb-5" th:text="${presentation.description}"></p>
+            <p class="lead mb-5" th:utext="${presentation.description}"></p>
             <div class="social-icons">
                 <a class="social-icon" th:href="${user.linkedin}" th:if="${!user.linkedin.isEmpty()}"><i class="fab fa-linkedin-in"></i></a>
                 <a class="social-icon" th:href="${user.github}" th:if="${!user.github.isEmpty()}"><i class="fab fa-github"></i></a>
@@ -163,7 +163,7 @@
 
                         <h3 class="mb-0" th:utext="${exp.title}"></h3>
                         <div class="subheading mb-3" th:utext="${exp.companyName}"></div>
-                        <p th:text="${exp.description}"></p>
+                        <p th:utext="${exp.description}"></p>
                     </div>
                     <div class="flex-shrink-0"><span class="text-primary"
                                                      th:text="${exp.startDate + ' - ' + exp.endDate}"></span></div>
@@ -180,8 +180,8 @@
             <tr th:each="edu: ${education}">
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                     <div class="flex-grow-1">
-                        <h3 class="mb-0" th:text="${edu.title}"></h3>
-                        <div class="subheading mb-3" th:text="${edu.name}"></div>
+                        <h3 class="mb-0" th:utext="${edu.title}"></h3>
+                        <div class="subheading mb-3" th:utext="${edu.name}"></div>
                     </div>
                     <div class="flex-shrink-0">
                         <span class="text-primary" th:text="${edu.startDate + ' - ' + edu.endDate}"></span>
@@ -200,8 +200,8 @@
             <tr th:each="ski: ${skill}">
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                     <div class="flex-grow-1">
-                        <h3 class="mb-0" th:text="${ski.name}"></h3>
-                        <div class="subheading mb-3" th:text="${ski.grade}"></div>
+                        <h3 class="mb-0" th:utext="${ski.name}"></h3>
+                        <div class="subheading mb-3" th:utext="${ski.grade}"></div>
                     </div>
                 </div>
             </tr>
@@ -215,8 +215,8 @@
             <tr th:each="hob: ${hobbies}">
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                     <div class="flex-grow-1">
-                        <h3 class="mb-0" th:text="${hob.title}"></h3>
-                        <div class="subheading mb-3" th:text="${hob.details}"></div>
+                        <h3 class="mb-0" th:utext="${hob.title}"></h3>
+                        <div class="subheading mb-3" th:utext="${hob.details}"></div>
                     </div>
                 </div>
             </tr>
@@ -230,11 +230,11 @@
             <div th:each="proj: ${project}">
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                     <div class="flex-grow-1">
-                        <h3 class="mb-0" th:text="${proj.title}"></h3>
-                        <div class="subheading mb-3" th:text="${proj.description}"></div>
+                        <h3 class="mb-0" th:utext="${proj.title}"></h3>
+                        <div class="subheading mb-3" th:utext="${proj.description}"></div>
                     </div>
                     <div class="flex-shrink-0">
-                        <span class="text-primary" th:text="${proj.date}"></span>
+                        <span class="text-primary" th:utext="${proj.date}"></span>
                     </div>
                 </div>
             </div>

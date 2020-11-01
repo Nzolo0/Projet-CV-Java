@@ -40,7 +40,8 @@
 
         window.addEventListener('load', function() {
             mdEditor();
-            initApp()
+            initApp();
+
         });
 
 
@@ -120,14 +121,17 @@
                         <label for="lastNameInput">Last Name</label>
                         <input type="text" th:field="*{lastName}" class="form-control" id="lastNameInput" placeholder="Enter last name">
                     </div>
+
                     <div class="form-group">
                         <label for="ageInput">Age</label>
-                        <input type="text" th:field="*{age}" class="form-control" id="ageInput" placeholder="Enter your age">
+                        <input type="number" min="0" max="120" th:field="*{age}" class="form-control" id="ageInput" placeholder="Enter your age">
                     </div>
+
                     <div class="form-group">
                         <label for="phoneInput">Phone number</label>
                         <input type="text" th:field="*{phone}" class="form-control" id="phoneInput" placeholder="Enter your phone number">
                     </div>
+                    
                     <div class="form-group">
                         <label for="emailInput">Email</label>
                         <input type="text" th:field="*{email}" class="form-control" id="emailInput" placeholder="Enter your email">
@@ -256,11 +260,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="eduStartDate">Start date</label>
-                                    <input type="text" th:field="*{educationList[__${eduStat.index}__].startDate}" class="form-control" id="eduStartDate" placeholder="Enter the start date">
+
+                                    <input type="number" min="1900" max="2100" th:field="*{educationList[__${eduStat.index}__].startDate}" class="form-control" id="eduStartDate" placeholder="Enter the start date">
                                 </div>
                                 <div class="form-group">
                                     <label for="eduEndDate">End Date</label>
-                                    <input type="text" th:field="*{educationList[__${eduStat.index}__].endDate}" class="form-control" id="eduEndDate" placeholder="Enter the end date">
+                                    <input type="number" min="1900" max="2100" th:field="*{educationList[__${eduStat.index}__].endDate}" class="form-control" id="eduEndDate" placeholder="Enter the end date">
                                 </div>
                             </div>
                             <input type="hidden" th:field="*{educationList[__${eduStat.index}__].id}">
@@ -380,7 +385,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="projDate">Year</label>
-                                    <input type="text" th:field="*{projectList[__${projStat.index}__].date}" class="form-control" id="projDate" placeholder="Enter the year">
+                                    <input type="number" min="1900" max="2100" th:field="*{projectList[__${projStat.index}__].date}" class="form-control" id="projDate" placeholder="Enter the year">
                                 </div>
                             </div>
                             <input type="hidden" th:field="*{projectList[__${projStat.index}__].id}">
@@ -434,24 +439,63 @@
 
     function mdEditor() {
 
-            var text = document.querySelectorAll("input[type=text]");
+            var text = document.querySelectorAll("input[type=text] ");
 
             for(var i = 0; i < text.length; i++) {
 
                     text.item(i).onclick = function (){
                     var editor = new Editor({
-                       element:this
+                       element:this,
+                        toolbar:[
+                            {name: 'bold', action: Editor.toggleBold},
+                            {name: 'italic', action: Editor.toggleItalic},
+                            {name: 'code', action: Editor.toggleCodeBlock},
+                            '|',
+
+                            {name: 'quote', action: Editor.toggleBlockquote},
+                            {name: 'unordered-list', action: Editor.toggleUnOrderedList},
+                            {name: 'ordered-list', action: Editor.toggleOrderedList},
+                            '|',
+
+                            {name: 'link', action: Editor.drawLink}
+
+                        ]
                     });
                     editor.render();
                 }
 
 
             }
+        var text2 = document.querySelectorAll("textarea");
 
+        for(var j = 0; j < text2.length; j++) {
+
+            text2.item(j).onclick = function (){
+                var editor = new Editor({
+                    element:this,
+                    toolbar:[
+                        {name: 'bold', action: Editor.toggleBold},
+                        {name: 'italic', action: Editor.toggleItalic},
+                        {name: 'code', action: Editor.toggleCodeBlock},
+                        '|',
+
+                        {name: 'quote', action: Editor.toggleBlockquote},
+                        {name: 'unordered-list', action: Editor.toggleUnOrderedList},
+                        {name: 'ordered-list', action: Editor.toggleOrderedList},
+                        '|',
+
+                        {name: 'link', action: Editor.drawLink}
+
+                        ]
+                });
+                editor.render();
+            }
         }
 
-</script>
+        var text = document.querySelectorAll("input[type=text]");
+    }
 
+</script>
 
 </body>
 </html>

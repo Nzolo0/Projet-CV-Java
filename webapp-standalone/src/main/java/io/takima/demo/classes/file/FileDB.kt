@@ -13,7 +13,7 @@ data class FileDB(
         @Column(name = "type") var type: String,
         @Lob
         @Column(name = "data") var data: ByteArray
-    ) {
+) {
 
     constructor() : this("", "", "", "".toByteArray())
 

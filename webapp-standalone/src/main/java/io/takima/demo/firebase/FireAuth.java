@@ -1,5 +1,9 @@
 package io.takima.demo.firebase;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -8,27 +12,21 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 public class FireAuth {
 
     private static final String BASE_URL = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/";
     private static final String OPERATION_AUTH = "verifyPassword";
     private static final String OPERATION_REFRESH_TOKEN = "token";
     private static final String OPERATION_ACCOUNT_INFO = "getAccountInfo";
-
-    private final String firebaseKey;
-
     private static FireAuth instance = null;
+    private final String firebaseKey;
 
     protected FireAuth() {
         firebaseKey = "AIzaSyB3FAYoMMFpObEahDK0T2e6CaTyBXxi5YM";
     }
 
     public static FireAuth getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new FireAuth();
         }
         return instance;
@@ -40,13 +38,13 @@ public class FireAuth {
         String token = null;
 
         try {
-            URL url = new URL(BASE_URL+OPERATION_AUTH+"?key="+firebaseKey);
+            URL url = new URL(BASE_URL + OPERATION_AUTH + "?key=" + firebaseKey);
             urlRequest = (HttpURLConnection) url.openConnection();
             urlRequest.setDoOutput(true);
             urlRequest.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             OutputStream os = urlRequest.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
-            osw.write("{\"email\":\""+username+"\",\"password\":\""+password+"\",\"returnSecureToken\":true}");
+            osw.write("{\"email\":\"" + username + "\",\"password\":\"" + password + "\",\"returnSecureToken\":true}");
             osw.flush();
             osw.close();
 
@@ -74,13 +72,13 @@ public class FireAuth {
         String email = null;
 
         try {
-            URL url = new URL(BASE_URL+OPERATION_ACCOUNT_INFO+"?key="+firebaseKey);
+            URL url = new URL(BASE_URL + OPERATION_ACCOUNT_INFO + "?key=" + firebaseKey);
             urlRequest = (HttpURLConnection) url.openConnection();
             urlRequest.setDoOutput(true);
             urlRequest.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             OutputStream os = urlRequest.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
-            osw.write("{\"idToken\":\""+token+"\"}");
+            osw.write("{\"idToken\":\"" + token + "\"}");
             osw.flush();
             osw.close();
             urlRequest.connect();

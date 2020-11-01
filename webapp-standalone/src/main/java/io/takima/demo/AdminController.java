@@ -1,42 +1,31 @@
 package io.takima.demo;
 
-import io.takima.demo.classes.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.takima.demo.classes.file.ResponseFile;
 import io.takima.demo.classes.wrapper.*;
 import io.takima.demo.dao.*;
 import io.takima.demo.files.FileStorageService;
 import io.takima.demo.firebase.FireAuth;
-import io.takima.demo.mail.EmailServiceImpl;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.servlet.view.RedirectView;
-
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
-
-import javax.mail.MessagingException;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -45,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AdminController {
 
+    public static String token = null;
     private final UserDAO userDAO;
     private final HobbyDAO hobbyDAO;
     private final EducationDAO educationDAO;
@@ -53,18 +43,14 @@ public class AdminController {
     private final ExperienceDAO experienceDAO;
     private final PresentationDAO presentationDAO;
     private final FileStorageService fileStorageService;
-
+    public String clientId = "77d3miszbwaz49";
+    public String clientSecret = "jKNQuZsVuSXnhg1i";
+    public String redirectUrl = "http://localhost:8080/afterauth";
     private ArrayList<Experience> experienceList;
     private ArrayList<Education> educationList;
     private ArrayList<Skill> skillList;
     private ArrayList<Hobby> hobbyList;
     private ArrayList<Project> projectList;
-
-    public static String token = null;
-
-    public String clientId="77d3miszbwaz49";
-    public String clientSecret="jKNQuZsVuSXnhg1i";
-    public String redirectUrl="http://localhost:8080/afterauth";
 
     public AdminController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, FileStorageService fileStorageService, ArrayList<Experience> experienceList, ArrayList<Education> educationList, ArrayList<Skill> skillList, ArrayList<Hobby> hobbyList, ArrayList<Project> projectList) {
         this.userDAO = userDAO;
@@ -447,7 +433,7 @@ public class AdminController {
     @GetMapping("/afterauth")
 
     //now store your authorization code
-    public String afterauth(@RequestParam("code") String authorizationCode) throws JSONException {
+    public String afterauth(@RequestParam("code") String authorizationCode) throws JSONException, JsonProcessingException {
 
         //to trade your authorization code for access token
         String accessTokenUri = "https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=" + authorizationCode + "&redirect_uri=" + redirectUrl + "&client_id=" + clientId + "&client_secret=" + clientSecret + "";
@@ -464,7 +450,7 @@ public class AdminController {
 
         //trade your access token
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " +accessToken);
+        headers.add("Authorization", "Bearer " + accessToken);
         HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
         ResponseEntity<String> linkedinDetailRequest = restTemplate.exchange(linedkinDetailUri, HttpMethod.GET, entity, String.class);
         //store json data
@@ -472,9 +458,21 @@ public class AdminController {
         //print json data in console
         System.out.println(jsonObjOfLinkedinDetail);
 
+
+        ObjectMapper mapper = new ObjectMapper();
+        LinkedinData linkedinData = mapper.readValue(jsonObjOfLinkedinDetail.toString(), LinkedinData.class);
+
+        User user = getCurrentUser();
+
+        user.setLastName(linkedinData.getLocalizedLastName());
+        user.setFirstName(linkedinData.getLocalizedFirstName());
+
+        userDAO.delete(user);
+        userDAO.save(user);
+
         return "redirect:/admin";
     }
 
 
-    }
+}
 

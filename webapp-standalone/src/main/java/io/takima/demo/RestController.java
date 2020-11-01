@@ -4,7 +4,6 @@ package io.takima.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.takima.demo.classes.Profile;
 import io.takima.demo.dao.*;
-import io.takima.demo.mail.EmailService;
 import io.takima.demo.mail.EmailServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,7 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.mail.MessagingException;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,12 +30,11 @@ public class RestController {
     private final UserDAO userDAO;
     private final HobbyDAO hobbyDAO;
     private final EducationDAO educationDAO;
-    private final SkillDAO  skillDAO;
+    private final SkillDAO skillDAO;
     private final ProjectDAO projectDAO;
     private final ExperienceDAO experienceDAO;
     private final PresentationDAO presentationDAO;
     private final EmailServiceImpl emailService;
-
 
 
     public RestController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, EmailServiceImpl emailService) {
@@ -55,7 +54,7 @@ public class RestController {
         String jsonString = mapper.writeValueAsString(getProfile());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "profile"+ "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "profile" + "\"")
                 .body(jsonString)
                 ;
     }
@@ -65,20 +64,20 @@ public class RestController {
 
         InputStream input = file.getInputStream();
         ObjectMapper mapper = new ObjectMapper();
-        try{
-            Profile profile=mapper.readValue(input, Profile.class);
+        try {
+            Profile profile = mapper.readValue(input, Profile.class);
             //todo : tester les entrées avant de delete
             deleteProfile();
 
             // tester les entrées
             uploadProfile(profile);
 
-        }catch (Exception e ){
+        } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error","Une erreur est survenue lors de l'upload du fichier");
+            redirectAttributes.addFlashAttribute("error", "Une erreur est survenue lors de l'upload du fichier");
         }
 
-        redirectAttributes.addFlashAttribute("message","successfully uploaded !");
+        redirectAttributes.addFlashAttribute("message", "successfully uploaded !");
         return "redirect:/";
 
     }
@@ -121,7 +120,7 @@ public class RestController {
         return profile;
     }
 
-    private void uploadProfile(Profile profile){
+    private void uploadProfile(Profile profile) {
 
         userDAO.saveAll(profile.getUser());
         educationDAO.saveAll(profile.getEducation());
@@ -132,7 +131,7 @@ public class RestController {
         skillDAO.saveAll(profile.getSkills());
     }
 
-    private void deleteProfile(){
+    private void deleteProfile() {
         userDAO.deleteAll();
         educationDAO.deleteAll();
         experienceDAO.deleteAll();
@@ -142,7 +141,6 @@ public class RestController {
         skillDAO.deleteAll();
         userDAO.deleteAll();
     }
-
 
 
 }

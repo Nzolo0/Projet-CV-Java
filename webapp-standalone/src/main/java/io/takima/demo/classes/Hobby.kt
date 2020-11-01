@@ -11,7 +11,7 @@ data class Hobby(
         @Id var id: Long?,
         @Column(name = "title") var title: String?,
         @Column(name = "details") var details: String?
-) :Comparable<Hobby> {
+) : Comparable<Hobby> {
     constructor() : this(null, null, null)
 
     override fun toString(): String {

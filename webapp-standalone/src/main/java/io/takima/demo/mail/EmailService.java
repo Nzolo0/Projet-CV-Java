@@ -13,5 +13,4 @@ public interface EmailService {
             throws IOException, MessagingException;
 
 
-
 }

@@ -21,7 +21,7 @@ data class User(
         @Column(name = "instagram") var instagram: String?,
         @Column(name = "facebook") var facebook: String?
 ) {
-    constructor() : this(null, null, null, null, null,null,null,null,null,null,null,null)
+    constructor() : this(null, null, null, null, null, null, null, null, null, null, null, null)
 
     override fun toString(): String {
         return "User(id=$id, firstName=$firstName, lastName=$lastName, age=$age, phone=$phone, email=$email, address=$address, title=$title, linkedin=$linkedin, github=$github, instagram=$instagram, facebook=$facebook)"

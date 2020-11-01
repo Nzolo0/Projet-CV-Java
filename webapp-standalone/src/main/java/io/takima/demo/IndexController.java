@@ -1,23 +1,20 @@
 package io.takima.demo;
 
-import io.takima.demo.classes.*;
+import io.takima.demo.classes.Profile;
 import io.takima.demo.classes.file.ResponseFile;
 import io.takima.demo.dao.*;
 import io.takima.demo.files.FileStorageService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -69,7 +66,7 @@ public class IndexController {
         m.addAttribute("education", profile.getEducationHTML()); // add sort
         m.addAttribute("skill", profile.getSkillHTML());
         m.addAttribute("project", profile.getProject());
-        m.addAttribute("experience",profile.getExperienceHTML());
+        m.addAttribute("experience", profile.getExperienceHTML());
         m.addAttribute("presentation", profile.getPresentationHTML());
         m.addAttribute("mail", new Mail());
     }
@@ -119,7 +116,6 @@ public class IndexController {
         profile.setUser(userDAO.findAll());
         return profile;
     }
-
 
 
 }
