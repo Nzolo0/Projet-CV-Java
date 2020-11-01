@@ -49,13 +49,13 @@
     </script>
 
     <script>
-        function changeColor(color,color2) {
+        function changeColor(color,color2) { //change body theme
             document.body.style.background = color;
             document.body.style.color = color2;
             createCookie("backgroundColor", color, 365);
             createCookie("textColor", color2, 365);
         }
-        function createCookie(name, value, days) {
+        function createCookie(name, value, days) { //create cookies for favorite themes
             if (days) {
                 var date = new Date();
                 date.setTime(date.getTime()+(days*24*60*60*1000));
@@ -65,7 +65,7 @@
             document.cookie = name+"="+value+expires+"; path=/";
         }
 
-        function readCookie(name) {
+        function readCookie(name) { //for reading cookies
             var nameEQ = name + "=";
             var ca = document.cookie.split(';');
             for(var i=0;i < ca.length;i++) {
