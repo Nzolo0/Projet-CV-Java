@@ -1,5 +1,5 @@
 package io.takima.demo;
-import ch.qos.logback.core.net.SyslogOutputStream;
+
 import io.takima.demo.Classes.*;
 import io.takima.demo.DAO.*;
 import io.takima.demo.files.FileStorageService;
@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
+
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 
 import javax.mail.MessagingException;
 import java.util.*;
@@ -27,6 +31,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  *
@@ -93,8 +102,8 @@ public class LibraryController {
 
         if (true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
-            m.addAttribute("user", getCurrentUser());
-            m.addAttribute("hobbies", hobbyDAO.findAll());
+            m.addAttribute("user", getUserHTML(getCurrentUser()));
+            m.addAttribute("hobbies", getHobbyHTML((ArrayList<Hobby>) hobbyDAO.findAll()));
             m.addAttribute("education", sortEducations());
             m.addAttribute("skill", skillDAO.findAll());
             m.addAttribute("project", projectDAO.findAll());
@@ -102,6 +111,7 @@ public class LibraryController {
             m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("mail", new Mail());
             m.addAttribute("files", files.stream().findFirst().get());
+
         }
     }
 
@@ -477,13 +487,6 @@ public class LibraryController {
 
     @PostMapping("/contact")
     public RedirectView contactAdmin(RedirectAttributes attrs, @ModelAttribute Mail mail) throws MessagingException {
-
-
-        // à rajouter dans la fct pour passer en post @ModelAttribute MailObject mailObject,
-        // TODO : ajouter ancre navbar de gauche dans index pour relier à contact
-        // TODO : regarder ajax pour ne pas reload la page
-        // TODO : supprimer download.html ?
-
         sendMail(mail);
         return new RedirectView("/");
     }
@@ -491,10 +494,10 @@ public class LibraryController {
     private void sendMail(Mail mail) throws MessagingException {
         //mail.setRecipientName("thymeleaf");
         //mail.setSubject("Sujet");
-        // TODO : remove  after tests mail.setTo("remi.beltramini@gmail.com");
+        // TODO : remove  after tests mail.setTo("JeanLapin ?);
         mail.setTo("clement.bardoux@epfedu.fr");
         Map<String, Object> templateModel = new HashMap<>();
-        //templateModel.put("recipientName", mail.getRecipientName());
+
         templateModel.put("senderName", mail.getSenderName());
         templateModel.put("senderMail", mail.getSenderMail());
         templateModel.put("subject", mail.getSubject());
@@ -510,10 +513,27 @@ public class LibraryController {
         return user;
     }
 
+    public User getCurrentUserHTML() {
+        // TODO : ajouter tests , erreurs etc ...
+        User user = userDAO.findAll().iterator().next();
+        System.out.println(user.toString());
+
+        user.setLastName(markdownToHTML(user.getLastName()));
+        System.out.println(user.getLastName());
+        user.setEmail(markdownToHTML(user.getEmail()));
+        user.setAddress(markdownToHTML(user.getAddress()));
+        return user;
+    }
+
+    @GetMapping("/uploadP")
+    public String UploadPage(Model m) {
+        return "upload";
+    }
+
     //create button on your page and hit this get request
     @GetMapping(value = "/authorization", params = "testAuth")
     public String authorization() {
-        String authorizationUri="https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id="+clientId+"&redirect_uri="+redirectUrl+"&scope=r_liteprofile%20r_emailaddress";
+        String authorizationUri = "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUrl + "&scope=r_liteprofile%20r_emailaddress";
         return "redirect:" + authorizationUri;
     }
 
@@ -524,7 +544,7 @@ public class LibraryController {
     public String afterauth(@RequestParam("code") String authorizationCode) throws JSONException {
 
         //to trade your authorization code for access token
-        String accessTokenUri ="https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code="+authorizationCode+"&redirect_uri="+redirectUrl+"&client_id="+clientId+"&client_secret="+clientSecret+"";
+        String accessTokenUri = "https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=" + authorizationCode + "&redirect_uri=" + redirectUrl + "&client_id=" + clientId + "&client_secret=" + clientSecret + "";
 
         // linkedin api to get linkedidn profile detail
         String linedkinDetailUri = "https://api.linkedin.com/v2/me";
@@ -547,4 +567,47 @@ public class LibraryController {
 
         return "redirect:/admin";
     }
-}
+
+        private String markdownToHTML (String markdown){
+            Parser parser = Parser.builder()
+                    .build();
+
+            Node document = parser.parse(markdown);
+            HtmlRenderer renderer = HtmlRenderer.builder()
+                    .build();
+
+            return renderer.render(document).replace("<p>", "").replace("</p>", "");
+        }
+
+        private User getUserHTML (User user){
+            return new User(
+                    user.getId(),
+                    markdownToHTML(user.getFirstName()),
+                    markdownToHTML(user.getLastName()),
+                    user.getAge(),
+                    markdownToHTML(user.getPhone()),
+                    markdownToHTML(user.getEmail()),
+                    markdownToHTML(user.getAddress()),
+                    markdownToHTML(user.getTitle()),
+                    markdownToHTML(user.getLinkedin()),
+                    markdownToHTML(user.getGithub()),
+                    markdownToHTML(user.getInstagram()),
+                    markdownToHTML(user.getFacebook()));
+
+        }
+
+        private Iterable<Hobby> getHobbyHTML (ArrayList < Hobby > hobby) {
+
+            ArrayList<Hobby> hobbyHTML = new ArrayList<Hobby>();
+
+            for (Hobby hob : hobby) {
+                hobbyHTML.add(new Hobby(hob.getId(), markdownToHTML(hob.getTitle()), markdownToHTML(hob.getDetails())));
+            }
+
+            return hobbyHTML;
+
+        }
+
+
+    }
+
