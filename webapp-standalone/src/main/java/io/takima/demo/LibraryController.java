@@ -18,6 +18,16 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+
 /**
  *
  */
@@ -28,7 +38,7 @@ public class LibraryController {
     private final UserDAO userDAO;
     private final HobbyDAO hobbyDAO;
     private final EducationDAO educationDAO;
-    private final SkillDAO  skillDAO;
+    private final SkillDAO skillDAO;
     private final ProjectDAO projectDAO;
     private final ExperienceDAO experienceDAO;
     private final PresentationDAO presentationDAO;
@@ -42,6 +52,10 @@ public class LibraryController {
     private ArrayList<Project> projectList;
 
     private String token = null;
+
+    public String clientId="77d3miszbwaz49";
+    public String clientSecret="jKNQuZsVuSXnhg1i";
+    public String redirectUrl="http://localhost:8080/afterauth";
 
     public LibraryController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, FileStorageService fileStorageService, EmailServiceImpl emailService, ArrayList<Experience> experienceList, ArrayList<Education> educationList, ArrayList<Skill> skillList, ArrayList<Hobby> hobbyList, ArrayList<Project> projectList) {
         this.userDAO = userDAO;
@@ -71,22 +85,22 @@ public class LibraryController {
     private void sendAttributesIndex(Model m) {
 
         // TODO : change it
-       // Optional<User> optUser = userDAO.findById((long) 1);
+        // Optional<User> optUser = userDAO.findById((long) 1);
         Optional<Presentation> optPresentation = Optional.ofNullable(presentationDAO.findAll().iterator().next());
 
         List<ResponseFile> files = collectFilesUrl();
 
 
-        if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
+        if (true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
-            m.addAttribute("user",getCurrentUser());
+            m.addAttribute("user", getCurrentUser());
             m.addAttribute("hobbies", hobbyDAO.findAll());
             m.addAttribute("education", sortEducations());
             m.addAttribute("skill", skillDAO.findAll());
             m.addAttribute("project", projectDAO.findAll());
             m.addAttribute("experience", sortExperiences());
             m.addAttribute("presentation", optPresentation.get());
-            m.addAttribute("mail",new Mail());
+            m.addAttribute("mail", new Mail());
             m.addAttribute("files", files.stream().findFirst().get());
         }
     }
@@ -113,7 +127,7 @@ public class LibraryController {
 
         List<ResponseFile> files = collectFilesUrl();
 
-        if(files.stream().findFirst().isPresent()) {
+        if (files.stream().findFirst().isPresent()) {
 
             m.addAttribute("files", files.stream().findFirst().get());
         }
@@ -164,7 +178,7 @@ public class LibraryController {
         List<ResponseFile> files = collectFilesUrl();
 
         //if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
-            if(true && true && files.stream().findFirst().isPresent()) {
+        if (true && true && files.stream().findFirst().isPresent()) {
             m.addAttribute("user", getCurrentUser());
             m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("expWrapper", getExperienceWrapper());
@@ -177,33 +191,33 @@ public class LibraryController {
         }
     }
 
-    @PostMapping( value="/", params="signIn")
+    @PostMapping(value = "/", params = "signIn")
     public String signInIndex() {
 
         return "redirect:/login";
     }
 
-    @PostMapping( value="/", params="signOut")
+    @PostMapping(value = "/", params = "signOut")
     public String signOutIndex(@RequestParam String tok) {
 
-            token = tok;
-            System.out.println(tok);
+        token = tok;
+        System.out.println(tok);
 
-            return "redirect:/";
+        return "redirect:/";
 
     }
 
-    @PostMapping( value="/admin", params="signOut")
+    @PostMapping(value = "/admin", params = "signOut")
     public String signOutAdmin(@RequestParam String tok) {
 
-            token = tok;
-            System.out.println(tok);
+        token = tok;
+        System.out.println(tok);
 
-            return "redirect:/";
+        return "redirect:/";
     }
 
 
-    @PostMapping( value="/admin", params="submitUser")
+    @PostMapping(value = "/admin", params = "submitUser")
     public String updateUser(@ModelAttribute User user, @ModelAttribute Presentation presentation, Model m) throws ExecutionException, InterruptedException {
 
         user.setId((long) 1);
@@ -225,7 +239,7 @@ public class LibraryController {
         return "redirect:/admin#about";
     }
 
-    @PostMapping( value="/admin", params="submitExp")
+    @PostMapping(value = "/admin", params = "submitExp")
     public String updateExp(@ModelAttribute ExperienceWrapper expWrapper, Model m) {
 
         experienceDAO.saveAll(expWrapper.getExperienceList());
@@ -235,7 +249,7 @@ public class LibraryController {
         return "redirect:/admin#experience";
     }
 
-    @PostMapping( value="/admin", params="removeExp")
+    @PostMapping(value = "/admin", params = "removeExp")
     public String deleteExp(@RequestParam Long expId, Model m) {
 
         experienceDAO.deleteById(expId);
@@ -245,7 +259,7 @@ public class LibraryController {
         return "redirect:/admin#experience";
     }
 
-    @PostMapping( value="/admin", params="addExp")
+    @PostMapping(value = "/admin", params = "addExp")
     public String addExp(Model m) {
 
         experienceDAO.save(new Experience());
@@ -255,7 +269,7 @@ public class LibraryController {
         return "redirect:/admin#experience";
     }
 
-    @PostMapping( value="/admin", params="submitEdu")
+    @PostMapping(value = "/admin", params = "submitEdu")
     public String updateEdu(@ModelAttribute EducationWrapper eduWrapper, Model m) {
 
         educationDAO.saveAll(eduWrapper.getEducationList());
@@ -265,7 +279,7 @@ public class LibraryController {
         return "redirect:/admin#education";
     }
 
-    @PostMapping( value="/admin", params="removeEdu")
+    @PostMapping(value = "/admin", params = "removeEdu")
     public String deleteEdu(@RequestParam Long eduId, Model m) {
 
         educationDAO.deleteById(eduId);
@@ -275,7 +289,7 @@ public class LibraryController {
         return "redirect:/admin#education";
     }
 
-    @PostMapping( value="/admin", params="addEdu")
+    @PostMapping(value = "/admin", params = "addEdu")
     public String addEdu(Model m) {
 
         educationDAO.save(new Education());
@@ -285,7 +299,7 @@ public class LibraryController {
         return "redirect:/admin#education";
     }
 
-    @PostMapping( value="/admin", params="submitSkill")
+    @PostMapping(value = "/admin", params = "submitSkill")
     public String updateSkill(@ModelAttribute SkillWrapper skillWrapper, Model m) {
 
         skillDAO.saveAll(skillWrapper.getSkillList());
@@ -295,7 +309,7 @@ public class LibraryController {
         return "redirect:/admin#skills";
     }
 
-    @PostMapping( value="/admin", params="removeSkill")
+    @PostMapping(value = "/admin", params = "removeSkill")
     public String deleteSkill(@RequestParam Long skillId, Model m) {
 
         skillDAO.deleteById(skillId);
@@ -305,7 +319,7 @@ public class LibraryController {
         return "redirect:/admin#skills";
     }
 
-    @PostMapping( value="/admin", params="addSkill")
+    @PostMapping(value = "/admin", params = "addSkill")
     public String addSkill(Model m) {
 
         skillDAO.save(new Skill());
@@ -314,8 +328,8 @@ public class LibraryController {
 
         return "redirect:/admin#skills";
     }
-    
-    @PostMapping( value="/admin", params="submitHobby")
+
+    @PostMapping(value = "/admin", params = "submitHobby")
     public String updateHobby(@ModelAttribute HobbyWrapper HobbyWrapper, Model m) {
 
         hobbyDAO.saveAll(HobbyWrapper.getHobbyList());
@@ -325,7 +339,7 @@ public class LibraryController {
         return "redirect:/admin#hobbies";
     }
 
-    @PostMapping( value="/admin", params="removeHobby")
+    @PostMapping(value = "/admin", params = "removeHobby")
     public String deleteHobby(@RequestParam Long hobbyId, Model m) {
 
         hobbyDAO.deleteById(hobbyId);
@@ -335,7 +349,7 @@ public class LibraryController {
         return "redirect:/admin#hobbies";
     }
 
-    @PostMapping( value="/admin", params="addHobby")
+    @PostMapping(value = "/admin", params = "addHobby")
     public String addHobby(Model m) {
 
         hobbyDAO.save(new Hobby());
@@ -345,7 +359,7 @@ public class LibraryController {
         return "redirect:/admin#hobbies";
     }
 
-    @PostMapping( value="/admin", params="submitProject")
+    @PostMapping(value = "/admin", params = "submitProject")
     public String updateProject(@ModelAttribute ProjectWrapper ProjectWrapper, Model m) {
 
         projectDAO.saveAll(ProjectWrapper.getProjectList());
@@ -355,7 +369,7 @@ public class LibraryController {
         return "redirect:/admin#projects";
     }
 
-    @PostMapping( value="/admin", params="removeProject")
+    @PostMapping(value = "/admin", params = "removeProject")
     public String deleteProject(@RequestParam Long projectId, Model m) {
 
         projectDAO.deleteById(projectId);
@@ -365,7 +379,7 @@ public class LibraryController {
         return "redirect:/admin#projects";
     }
 
-    @PostMapping( value="/admin", params="addProject")
+    @PostMapping(value = "/admin", params = "addProject")
     public String addProject(Model m) {
 
         projectDAO.save(new Project());
@@ -489,17 +503,48 @@ public class LibraryController {
         emailService.sendMessageUsingThymeleafTemplate(mail.getTo(), mail.getSubject(), templateModel);
     }
 
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         // TODO : ajouter tests , erreurs etc ...
         User user = userDAO.findAll().iterator().next();
         System.out.println(user.toString());
         return user;
     }
 
-    @GetMapping("/uploadP")
-    public String UploadPage(Model m) {
-        return "upload";
+    //create button on your page and hit this get request
+    @GetMapping(value = "/authorization", params = "testAuth")
+    public String authorization() {
+        String authorizationUri="https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id="+clientId+"&redirect_uri="+redirectUrl+"&scope=r_liteprofile%20r_emailaddress";
+        return "redirect:" + authorizationUri;
     }
 
+    //after login in your linkedin account your app will hit this get request
+    @GetMapping("/afterauth")
 
+    //now store your authorization code
+    public String afterauth(@RequestParam("code") String authorizationCode) throws JSONException {
+
+        //to trade your authorization code for access token
+        String accessTokenUri ="https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code="+authorizationCode+"&redirect_uri="+redirectUrl+"&client_id="+clientId+"&client_secret="+clientSecret+"";
+
+        // linkedin api to get linkedidn profile detail
+        String linedkinDetailUri = "https://api.linkedin.com/v2/me";
+
+        //store your access token
+        RestTemplate restTemplate = new RestTemplate();
+        String accessTokenRequest = restTemplate.getForObject(accessTokenUri, String.class);
+        JSONObject jsonObjOfAccessToken = new JSONObject(accessTokenRequest);
+        String accessToken = jsonObjOfAccessToken.get("access_token").toString();
+
+        //trade your access token
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " +accessToken);
+        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+        ResponseEntity<String> linkedinDetailRequest = restTemplate.exchange(linedkinDetailUri, HttpMethod.GET, entity, String.class);
+        //store json data
+        JSONObject jsonObjOfLinkedinDetail = new JSONObject(linkedinDetailRequest.getBody());
+        //print json data in console
+        System.out.println(jsonObjOfLinkedinDetail);
+
+        return "redirect:/admin";
+    }
 }
