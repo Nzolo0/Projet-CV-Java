@@ -502,62 +502,9 @@ public class LibraryController {
         return user;
     }
 
-    public User getCurrentUserHTML() {
-        // TODO : ajouter tests , erreurs etc ...
-        User user = userDAO.findAll().iterator().next();
-        System.out.println(user.toString());
-
-        user.setLastName(markdownToHTML(user.getLastName()));
-        System.out.println(user.getLastName());
-        user.setEmail(markdownToHTML(user.getEmail()));
-        user.setAddress(markdownToHTML(user.getAddress()));
-        return user;
-    }
-
     @GetMapping("/uploadP")
     public String UploadPage(Model m) {
         return "upload";
-    }
-
-
-    private String markdownToHTML(String markdown) {
-        Parser parser = Parser.builder()
-                .build();
-
-        Node document = parser.parse(markdown);
-        HtmlRenderer renderer = HtmlRenderer.builder()
-                .build();
-
-        return renderer.render(document).replace("<p>", "").replace("</p>", "");
-    }
-
-    private User getUserHTML(User user) {
-        return new User(
-                user.getId(),
-                markdownToHTML(user.getFirstName()),
-                markdownToHTML(user.getLastName()),
-                user.getAge(),
-                markdownToHTML(user.getPhone()),
-                markdownToHTML(user.getEmail()),
-                markdownToHTML(user.getAddress()),
-                markdownToHTML(user.getTitle()),
-                markdownToHTML(user.getLinkedin()),
-                markdownToHTML(user.getGithub()),
-                markdownToHTML(user.getInstagram()),
-                markdownToHTML(user.getFacebook()));
-
-    }
-
-    private Iterable<Project> getProjectHTML(ArrayList<Project> project) {
-
-        ArrayList<Project> projectHtml = new ArrayList<Project>();
-
-        for (Project item : project) {
-       //     projectHtml.add(new Hobby(item.getId(),markdownToHTML(item.getTitle()),markdownToHTML(item.getDetails())));
-        }
-
-        return projectHtml;
-
     }
 
     private Profile getProfile() {
