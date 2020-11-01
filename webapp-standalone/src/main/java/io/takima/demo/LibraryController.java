@@ -85,16 +85,18 @@ public class LibraryController {
 
         List<ResponseFile> files = collectFilesUrl();
 
+        Profile profile = getProfile();
+
 
         if (true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
-            m.addAttribute("user", getUserHTML(getCurrentUser()));
-            m.addAttribute("hobbies", getHobbyHTML((ArrayList<Hobby>) hobbyDAO.findAll()));
-            m.addAttribute("education", sortEducations());
-            m.addAttribute("skill", skillDAO.findAll());
-            m.addAttribute("project", projectDAO.findAll());
-            m.addAttribute("experience", sortExperiences());
-            m.addAttribute("presentation", optPresentation.get());
+            m.addAttribute("user", profile.getCurrentUserHTML());
+            m.addAttribute("hobbies", profile.getHobbyHTML());
+            m.addAttribute("education", profile.getEducationHTML()); // add sort
+            m.addAttribute("skill", profile.getSkillHTML());
+            m.addAttribute("project", profile.getProject());
+            m.addAttribute("experience",profile.getExperienceHTML());
+            m.addAttribute("presentation", profile.getPresentationHTML());
             m.addAttribute("mail", new Mail());
             m.addAttribute("files", files.stream().findFirst().get());
 
@@ -175,6 +177,7 @@ public class LibraryController {
 
         //if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
         if (true && true && files.stream().findFirst().isPresent()) {
+            
             m.addAttribute("user", getCurrentUser());
             m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("expWrapper", getExperienceWrapper());
@@ -545,16 +548,29 @@ public class LibraryController {
 
     }
 
-    private Iterable<Hobby> getHobbyHTML(ArrayList<Hobby> hobby) {
+    private Iterable<Project> getProjectHTML(ArrayList<Project> project) {
 
-        ArrayList<Hobby> hobbyHTML = new ArrayList<Hobby>();
+        ArrayList<Project> projectHtml = new ArrayList<Project>();
 
-        for (Hobby hob : hobby) {
-             hobbyHTML.add(new Hobby(hob.getId(),markdownToHTML(hob.getTitle()),markdownToHTML(hob.getDetails())));
+        for (Project item : project) {
+       //     projectHtml.add(new Hobby(item.getId(),markdownToHTML(item.getTitle()),markdownToHTML(item.getDetails())));
         }
 
-        return hobbyHTML;
+        return projectHtml;
 
+    }
+
+    private Profile getProfile() {
+
+        Profile profile = new Profile();
+        profile.setEducation(educationDAO.findAll());
+        profile.setExperience(experienceDAO.findAll());
+        profile.setHobby(hobbyDAO.findAll());
+        profile.setPresentation(presentationDAO.findAll());
+        profile.setProject(projectDAO.findAll());
+        profile.setSkills(skillDAO.findAll());
+        profile.setUser(userDAO.findAll());
+        return profile;
     }
 
 

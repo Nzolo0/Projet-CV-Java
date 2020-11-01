@@ -60,7 +60,8 @@ public class RestController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "profile"+ "\"")
-                .body(jsonString);
+                .body(jsonString)
+                ;
     }
 
     @PostMapping("/uploadProfile")
@@ -102,9 +103,6 @@ public class RestController {
 
     private void uploadProfile(Profile profile){
 
-
-        if(profile.getUser().iterator().next().isValid())
-        // todo : check entries
         userDAO.saveAll(profile.getUser());
         educationDAO.saveAll(profile.getEducation());
         experienceDAO.saveAll(profile.getExperience());

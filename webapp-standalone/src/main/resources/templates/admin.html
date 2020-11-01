@@ -93,7 +93,9 @@
             <h2 class="mb-5">About</h2>
 
             <div class="container">
-
+                <form method="GET" th:action="@{/authorization}" enctype="multipart/form-data">
+                    <input type="image" th:src="@{/assets/img/linkedin.png}" name="testAuth" width="180px">
+                </form>
                 <form method="POST" th:action="@{/api/uploadProfile}" enctype="multipart/form-data">
                     <label for="imageFile">Import Profile :</label>
                     <input type="file" name="file"/>
@@ -431,11 +433,20 @@
     }
 
     function mdEditor() {
+
             var text = document.querySelectorAll("input[type=text]");
+
             for(var i = 0; i < text.length; i++) {
-                text.item(i).onclick = function (){
+
+                    text.item(i).onclick = function (){
                     var editor = new Editor({
                        element:this
+                    });
+                    editor.render();
+                }
+                text.item(i) = function (){
+                    var editor = new Editor({
+                        element:this
                     });
                     editor.render();
                 }
