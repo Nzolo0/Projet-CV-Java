@@ -1,4 +1,5 @@
 package io.takima.demo;
+
 import io.takima.demo.Classes.*;
 import io.takima.demo.DAO.*;
 import io.takima.demo.files.FileStorageService;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 /**
  *
  */
@@ -35,7 +37,7 @@ public class LibraryController {
     private final UserDAO userDAO;
     private final HobbyDAO hobbyDAO;
     private final EducationDAO educationDAO;
-    private final SkillDAO  skillDAO;
+    private final SkillDAO skillDAO;
     private final ProjectDAO projectDAO;
     private final ExperienceDAO experienceDAO;
     private final PresentationDAO presentationDAO;
@@ -78,23 +80,24 @@ public class LibraryController {
     private void sendAttributesIndex(Model m) {
 
         // TODO : change it
-       // Optional<User> optUser = userDAO.findById((long) 1);
+        // Optional<User> optUser = userDAO.findById((long) 1);
         Optional<Presentation> optPresentation = Optional.ofNullable(presentationDAO.findAll().iterator().next());
 
         List<ResponseFile> files = collectFilesUrl();
 
 
-        if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
+        if (true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
-            m.addAttribute("user", getCurrentUserHTML());
-            m.addAttribute("hobbies", hobbyDAO.findAll());
+            m.addAttribute("user", getUserHTML(getCurrentUser()));
+            m.addAttribute("hobbies", getHobbyHTML((ArrayList<Hobby>) hobbyDAO.findAll()));
             m.addAttribute("education", sortEducations());
             m.addAttribute("skill", skillDAO.findAll());
             m.addAttribute("project", projectDAO.findAll());
             m.addAttribute("experience", sortExperiences());
             m.addAttribute("presentation", optPresentation.get());
-            m.addAttribute("mail",new Mail());
+            m.addAttribute("mail", new Mail());
             m.addAttribute("files", files.stream().findFirst().get());
+
         }
     }
 
@@ -120,7 +123,7 @@ public class LibraryController {
 
         List<ResponseFile> files = collectFilesUrl();
 
-        if(files.stream().findFirst().isPresent()) {
+        if (files.stream().findFirst().isPresent()) {
 
             m.addAttribute("files", files.stream().findFirst().get());
         }
@@ -171,7 +174,7 @@ public class LibraryController {
         List<ResponseFile> files = collectFilesUrl();
 
         //if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
-            if(true && true && files.stream().findFirst().isPresent()) {
+        if (true && true && files.stream().findFirst().isPresent()) {
             m.addAttribute("user", getCurrentUser());
             m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("expWrapper", getExperienceWrapper());
@@ -184,33 +187,33 @@ public class LibraryController {
         }
     }
 
-    @PostMapping( value="/", params="signIn")
+    @PostMapping(value = "/", params = "signIn")
     public String signInIndex() {
 
         return "redirect:/login";
     }
 
-    @PostMapping( value="/", params="signOut")
+    @PostMapping(value = "/", params = "signOut")
     public String signOutIndex(@RequestParam String tok) {
 
-            token = tok;
-            System.out.println(tok);
+        token = tok;
+        System.out.println(tok);
 
-            return "redirect:/";
+        return "redirect:/";
 
     }
 
-    @PostMapping( value="/admin", params="signOut")
+    @PostMapping(value = "/admin", params = "signOut")
     public String signOutAdmin(@RequestParam String tok) {
 
-            token = tok;
-            System.out.println(tok);
+        token = tok;
+        System.out.println(tok);
 
-            return "redirect:/";
+        return "redirect:/";
     }
 
 
-    @PostMapping( value="/admin", params="submitUser")
+    @PostMapping(value = "/admin", params = "submitUser")
     public String updateUser(@ModelAttribute User user, @ModelAttribute Presentation presentation, Model m) throws ExecutionException, InterruptedException {
 
         user.setId((long) 1);
@@ -232,7 +235,7 @@ public class LibraryController {
         return "redirect:/admin#about";
     }
 
-    @PostMapping( value="/admin", params="submitExp")
+    @PostMapping(value = "/admin", params = "submitExp")
     public String updateExp(@ModelAttribute ExperienceWrapper expWrapper, Model m) {
 
         experienceDAO.saveAll(expWrapper.getExperienceList());
@@ -242,7 +245,7 @@ public class LibraryController {
         return "redirect:/admin#experience";
     }
 
-    @PostMapping( value="/admin", params="removeExp")
+    @PostMapping(value = "/admin", params = "removeExp")
     public String deleteExp(@RequestParam Long expId, Model m) {
 
         experienceDAO.deleteById(expId);
@@ -252,7 +255,7 @@ public class LibraryController {
         return "redirect:/admin#experience";
     }
 
-    @PostMapping( value="/admin", params="addExp")
+    @PostMapping(value = "/admin", params = "addExp")
     public String addExp(Model m) {
 
         experienceDAO.save(new Experience());
@@ -262,7 +265,7 @@ public class LibraryController {
         return "redirect:/admin#experience";
     }
 
-    @PostMapping( value="/admin", params="submitEdu")
+    @PostMapping(value = "/admin", params = "submitEdu")
     public String updateEdu(@ModelAttribute EducationWrapper eduWrapper, Model m) {
 
         educationDAO.saveAll(eduWrapper.getEducationList());
@@ -272,7 +275,7 @@ public class LibraryController {
         return "redirect:/admin#education";
     }
 
-    @PostMapping( value="/admin", params="removeEdu")
+    @PostMapping(value = "/admin", params = "removeEdu")
     public String deleteEdu(@RequestParam Long eduId, Model m) {
 
         educationDAO.deleteById(eduId);
@@ -282,7 +285,7 @@ public class LibraryController {
         return "redirect:/admin#education";
     }
 
-    @PostMapping( value="/admin", params="addEdu")
+    @PostMapping(value = "/admin", params = "addEdu")
     public String addEdu(Model m) {
 
         educationDAO.save(new Education());
@@ -292,7 +295,7 @@ public class LibraryController {
         return "redirect:/admin#education";
     }
 
-    @PostMapping( value="/admin", params="submitSkill")
+    @PostMapping(value = "/admin", params = "submitSkill")
     public String updateSkill(@ModelAttribute SkillWrapper skillWrapper, Model m) {
 
         skillDAO.saveAll(skillWrapper.getSkillList());
@@ -302,7 +305,7 @@ public class LibraryController {
         return "redirect:/admin#skills";
     }
 
-    @PostMapping( value="/admin", params="removeSkill")
+    @PostMapping(value = "/admin", params = "removeSkill")
     public String deleteSkill(@RequestParam Long skillId, Model m) {
 
         skillDAO.deleteById(skillId);
@@ -312,7 +315,7 @@ public class LibraryController {
         return "redirect:/admin#skills";
     }
 
-    @PostMapping( value="/admin", params="addSkill")
+    @PostMapping(value = "/admin", params = "addSkill")
     public String addSkill(Model m) {
 
         skillDAO.save(new Skill());
@@ -321,8 +324,8 @@ public class LibraryController {
 
         return "redirect:/admin#skills";
     }
-    
-    @PostMapping( value="/admin", params="submitHobby")
+
+    @PostMapping(value = "/admin", params = "submitHobby")
     public String updateHobby(@ModelAttribute HobbyWrapper HobbyWrapper, Model m) {
 
         hobbyDAO.saveAll(HobbyWrapper.getHobbyList());
@@ -332,7 +335,7 @@ public class LibraryController {
         return "redirect:/admin#hobbies";
     }
 
-    @PostMapping( value="/admin", params="removeHobby")
+    @PostMapping(value = "/admin", params = "removeHobby")
     public String deleteHobby(@RequestParam Long hobbyId, Model m) {
 
         hobbyDAO.deleteById(hobbyId);
@@ -342,7 +345,7 @@ public class LibraryController {
         return "redirect:/admin#hobbies";
     }
 
-    @PostMapping( value="/admin", params="addHobby")
+    @PostMapping(value = "/admin", params = "addHobby")
     public String addHobby(Model m) {
 
         hobbyDAO.save(new Hobby());
@@ -352,7 +355,7 @@ public class LibraryController {
         return "redirect:/admin#hobbies";
     }
 
-    @PostMapping( value="/admin", params="submitProject")
+    @PostMapping(value = "/admin", params = "submitProject")
     public String updateProject(@ModelAttribute ProjectWrapper ProjectWrapper, Model m) {
 
         projectDAO.saveAll(ProjectWrapper.getProjectList());
@@ -362,7 +365,7 @@ public class LibraryController {
         return "redirect:/admin#projects";
     }
 
-    @PostMapping( value="/admin", params="removeProject")
+    @PostMapping(value = "/admin", params = "removeProject")
     public String deleteProject(@RequestParam Long projectId, Model m) {
 
         projectDAO.deleteById(projectId);
@@ -372,7 +375,7 @@ public class LibraryController {
         return "redirect:/admin#projects";
     }
 
-    @PostMapping( value="/admin", params="addProject")
+    @PostMapping(value = "/admin", params = "addProject")
     public String addProject(Model m) {
 
         projectDAO.save(new Project());
@@ -470,13 +473,6 @@ public class LibraryController {
 
     @PostMapping("/contact")
     public RedirectView contactAdmin(RedirectAttributes attrs, @ModelAttribute Mail mail) throws MessagingException {
-
-
-        // à rajouter dans la fct pour passer en post @ModelAttribute MailObject mailObject,
-        // TODO : ajouter ancre navbar de gauche dans index pour relier à contact
-        // TODO : regarder ajax pour ne pas reload la page
-        // TODO : supprimer download.html ?
-
         sendMail(mail);
         return new RedirectView("/");
     }
@@ -484,10 +480,9 @@ public class LibraryController {
     private void sendMail(Mail mail) throws MessagingException {
         //mail.setRecipientName("thymeleaf");
         //mail.setSubject("Sujet");
-        // TODO : remove  after tests mail.setTo("remi.beltramini@gmail.com");
+        // TODO : remove  after tests mail.setTo("JeanLapin ?);
         mail.setTo("clement.bardoux@epfedu.fr");
         Map<String, Object> templateModel = new HashMap<>();
-        //templateModel.put("recipientName", mail.getRecipientName());
 
         templateModel.put("senderName", mail.getSenderName());
         templateModel.put("senderMail", mail.getSenderMail());
@@ -497,19 +492,20 @@ public class LibraryController {
         emailService.sendMessageUsingThymeleafTemplate(mail.getTo(), mail.getSubject(), templateModel);
     }
 
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         // TODO : ajouter tests , erreurs etc ...
         User user = userDAO.findAll().iterator().next();
         System.out.println(user.toString());
         return user;
     }
 
-    public User getCurrentUserHTML(){
+    public User getCurrentUserHTML() {
         // TODO : ajouter tests , erreurs etc ...
         User user = userDAO.findAll().iterator().next();
         System.out.println(user.toString());
 
         user.setLastName(markdownToHTML(user.getLastName()));
+        System.out.println(user.getLastName());
         user.setEmail(markdownToHTML(user.getEmail()));
         user.setAddress(markdownToHTML(user.getAddress()));
         return user;
@@ -520,6 +516,7 @@ public class LibraryController {
         return "upload";
     }
 
+
     private String markdownToHTML(String markdown) {
         Parser parser = Parser.builder()
                 .build();
@@ -528,7 +525,37 @@ public class LibraryController {
         HtmlRenderer renderer = HtmlRenderer.builder()
                 .build();
 
-        return renderer.render(document);
+        return renderer.render(document).replace("<p>", "").replace("</p>", "");
     }
+
+    private User getUserHTML(User user) {
+        return new User(
+                user.getId(),
+                markdownToHTML(user.getFirstName()),
+                markdownToHTML(user.getLastName()),
+                user.getAge(),
+                markdownToHTML(user.getPhone()),
+                markdownToHTML(user.getEmail()),
+                markdownToHTML(user.getAddress()),
+                markdownToHTML(user.getTitle()),
+                markdownToHTML(user.getLinkedin()),
+                markdownToHTML(user.getGithub()),
+                markdownToHTML(user.getInstagram()),
+                markdownToHTML(user.getFacebook()));
+
+    }
+
+    private Iterable<Hobby> getHobbyHTML(ArrayList<Hobby> hobby) {
+
+        ArrayList<Hobby> hobbyHTML = new ArrayList<Hobby>();
+
+        for (Hobby hob : hobby) {
+             hobbyHTML.add(new Hobby(hob.getId(),markdownToHTML(hob.getTitle()),markdownToHTML(hob.getDetails())));
+        }
+
+        return hobbyHTML;
+
+    }
+
 
 }

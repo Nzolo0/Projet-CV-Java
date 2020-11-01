@@ -71,7 +71,6 @@ public class RestController {
         try{
             Profile profile=mapper.readValue(input, Profile.class);
             //todo : tester les entrées avant de delete
-            //todo :
             deleteProfile();
 
             // tester les entrées
@@ -83,8 +82,6 @@ public class RestController {
         }
 
         redirectAttributes.addFlashAttribute("message","successfully uploaded !");
-        // Todo : delete
-       // return "redirect:/uploadP";
         return "redirect:/";
 
     }
