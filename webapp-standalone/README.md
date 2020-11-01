@@ -29,3 +29,6 @@ Dans Target Data Source, ajouter la base de donnée fraichement créée, puis ex
 Exécuter 2_Default_Entries.sql de la même manière.
 
 8. Exécuter l'application via IntelliJ, et vérifiez qu'elle fonctionne sur http://localhost:8080 (par défaut)
+
+9. Connexion admin : user : noreply.supercv@gmail.com
+password : rootroot
