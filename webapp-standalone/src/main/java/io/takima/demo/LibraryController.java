@@ -1,5 +1,4 @@
 package io.takima.demo;
-import ch.qos.logback.core.net.SyslogOutputStream;
 import io.takima.demo.Classes.*;
 import io.takima.demo.DAO.*;
 import io.takima.demo.files.FileStorageService;
@@ -13,11 +12,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+
 import javax.mail.MessagingException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 /**
  *
  */
@@ -79,7 +86,7 @@ public class LibraryController {
 
         if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
-            m.addAttribute("user",getCurrentUser());
+            m.addAttribute("user", getCurrentUserHTML());
             m.addAttribute("hobbies", hobbyDAO.findAll());
             m.addAttribute("education", sortEducations());
             m.addAttribute("skill", skillDAO.findAll());
@@ -481,6 +488,7 @@ public class LibraryController {
         mail.setTo("clement.bardoux@epfedu.fr");
         Map<String, Object> templateModel = new HashMap<>();
         //templateModel.put("recipientName", mail.getRecipientName());
+
         templateModel.put("senderName", mail.getSenderName());
         templateModel.put("senderMail", mail.getSenderMail());
         templateModel.put("subject", mail.getSubject());
@@ -496,10 +504,31 @@ public class LibraryController {
         return user;
     }
 
+    public User getCurrentUserHTML(){
+        // TODO : ajouter tests , erreurs etc ...
+        User user = userDAO.findAll().iterator().next();
+        System.out.println(user.toString());
+
+        user.setLastName(markdownToHTML(user.getLastName()));
+        user.setEmail(markdownToHTML(user.getEmail()));
+        user.setAddress(markdownToHTML(user.getAddress()));
+        return user;
+    }
+
     @GetMapping("/uploadP")
     public String UploadPage(Model m) {
         return "upload";
     }
 
+    private String markdownToHTML(String markdown) {
+        Parser parser = Parser.builder()
+                .build();
+
+        Node document = parser.parse(markdown);
+        HtmlRenderer renderer = HtmlRenderer.builder()
+                .build();
+
+        return renderer.render(document);
+    }
 
 }

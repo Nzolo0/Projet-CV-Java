@@ -133,12 +133,12 @@
         <div class="resume-section-content">
             <h1 class="mb-0">
                 <span th:text="${user.firstName}"></span>
-                <span class="text-primary" th:text="${user.lastName}">
-                        </span>
+                <div class="text-primary" th:utext="${user.lastName}">FirstName</div>
+
             </h1>
             <div class="subheading mb-5">
-                <span th:text="${user.address}"></span> · <span th:text="${user.phone}"></span> ·
-                <a th:href="'mailto:' + ${user.email}"><span th:text="${user.email}"></span></a>
+                <span th:utext="${user.address}"></span> · <span th:text="${user.phone}"></span> ·
+                <a th:href="'mailto:' + ${user.email}"><span th:utext="${user.email}"></span></a>
             </div>
             <p class="lead mb-5" th:text="${presentation.description}"></p>
             <div class="social-icons">
@@ -151,7 +151,6 @@
     </section>
     <hr class="m-0"/>
 
-
     <!-- Experience-->
     <section class="resume-section" id="experience">
         <div class="resume-section-content">
@@ -161,8 +160,8 @@
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                     <div class="flex-grow-1">
 
-                        <h3 class="mb-0" th:text="${exp.title}"></h3>
-                        <div class="subheading mb-3" th:text="${exp.companyName}"></div>
+                        <h3 class="mb-0" th:utext="${exp.title}"></h3>
+                        <div class="subheading mb-3" th:utext="${exp.companyName}"></div>
                         <p th:text="${exp.description}"></p>
                     </div>
                     <div class="flex-shrink-0"><span class="text-primary"

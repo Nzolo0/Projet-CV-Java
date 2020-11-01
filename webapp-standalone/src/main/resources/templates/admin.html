@@ -19,6 +19,11 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <!-- Mardown -->
+    <link rel="stylesheet" href="http://lab.lepture.com/editor/editor.css" />
+    <script type="text/javascript" src="http://lab.lepture.com/editor/editor.js"></script>
+    <script type="text/javascript" src="http://lab.lepture.com/editor/marked.js"></script>
+
 
     <script th:src="@{js/configFirebase.js}"></script>
 
@@ -36,8 +41,11 @@
         };
 
         window.addEventListener('load', function() {
+            mdEditor()
             initApp()
         });
+
+
 
 
     </script>
@@ -421,6 +429,21 @@
             return false;
         }
     }
+
+    function mdEditor() {
+            var text = document.querySelectorAll("input[type=text]");
+            for(var i = 0; i < text.length; i++) {
+                text.item(i).onclick = function (){
+                    var editor = new Editor({
+                       element:this
+                    });
+                    editor.render();
+                }
+
+
+            }
+
+        }
 
 </script>
 
