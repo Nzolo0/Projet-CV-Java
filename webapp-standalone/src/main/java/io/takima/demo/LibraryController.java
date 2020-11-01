@@ -99,16 +99,18 @@ public class LibraryController {
 
         List<ResponseFile> files = collectFilesUrl();
 
+        Profile profile = getProfile();
+
 
         if (true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
 
-            m.addAttribute("user", getUserHTML(getCurrentUser()));
-            m.addAttribute("hobbies", getHobbyHTML((ArrayList<Hobby>) hobbyDAO.findAll()));
-            m.addAttribute("education", sortEducations());
-            m.addAttribute("skill", skillDAO.findAll());
-            m.addAttribute("project", projectDAO.findAll());
-            m.addAttribute("experience", sortExperiences());
-            m.addAttribute("presentation", optPresentation.get());
+            m.addAttribute("user", profile.getCurrentUserHTML());
+            m.addAttribute("hobbies", profile.getHobbyHTML());
+            m.addAttribute("education", profile.getEducationHTML()); // add sort
+            m.addAttribute("skill", profile.getSkillHTML());
+            m.addAttribute("project", profile.getProject());
+            m.addAttribute("experience",profile.getExperienceHTML());
+            m.addAttribute("presentation", profile.getPresentationHTML());
             m.addAttribute("mail", new Mail());
             m.addAttribute("files", files.stream().findFirst().get());
 
@@ -189,6 +191,7 @@ public class LibraryController {
 
         //if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
         if (true && true && files.stream().findFirst().isPresent()) {
+            
             m.addAttribute("user", getCurrentUser());
             m.addAttribute("presentation", optPresentation.get());
             m.addAttribute("expWrapper", getExperienceWrapper());
@@ -513,18 +516,6 @@ public class LibraryController {
         return user;
     }
 
-    public User getCurrentUserHTML() {
-        // TODO : ajouter tests , erreurs etc ...
-        User user = userDAO.findAll().iterator().next();
-        System.out.println(user.toString());
-
-        user.setLastName(markdownToHTML(user.getLastName()));
-        System.out.println(user.getLastName());
-        user.setEmail(markdownToHTML(user.getEmail()));
-        user.setAddress(markdownToHTML(user.getAddress()));
-        return user;
-    }
-
     @GetMapping("/uploadP")
     public String UploadPage(Model m) {
         return "upload";
@@ -536,6 +527,17 @@ public class LibraryController {
         String authorizationUri = "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUrl + "&scope=r_liteprofile%20r_emailaddress";
         return "redirect:" + authorizationUri;
     }
+    private Profile getProfile() {
+         Profile profile = new Profile();
+        profile.setEducation(educationDAO.findAll());
+        profile.setExperience(experienceDAO.findAll());
+        profile.setHobby(hobbyDAO.findAll());
+        profile.setPresentation(presentationDAO.findAll());
+        profile.setProject(projectDAO.findAll());
+        profile.setSkills(skillDAO.findAll());
+        profile.setUser(userDAO.findAll());
+        return profile;
+    }
 
     //after login in your linkedin account your app will hit this get request
     @GetMapping("/afterauth")
@@ -545,6 +547,7 @@ public class LibraryController {
 
         //to trade your authorization code for access token
         String accessTokenUri = "https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=" + authorizationCode + "&redirect_uri=" + redirectUrl + "&client_id=" + clientId + "&client_secret=" + clientSecret + "";
+       
 
         // linkedin api to get linkedidn profile detail
         String linedkinDetailUri = "https://api.linkedin.com/v2/me";
