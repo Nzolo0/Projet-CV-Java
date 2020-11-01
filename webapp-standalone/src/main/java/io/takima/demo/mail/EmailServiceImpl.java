@@ -13,8 +13,6 @@ import java.util.Map;
 
 @Service("EmailService")
 public class EmailServiceImpl implements EmailService {
-    // TODO : change adress
-    private static final String NOREPLY_ADDRESS = "noreply@baeldung.com";
 
     @Autowired
     private SpringTemplateEngine thymeleafTemplateEngine;
@@ -27,7 +25,6 @@ public class EmailServiceImpl implements EmailService {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        //helper.setFrom(NOREPLY_ADDRESS);
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);

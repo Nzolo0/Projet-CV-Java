@@ -1,4 +1,4 @@
-package io.takima.demo.Classes
+package io.takima.demo.classes.file
 
 class ResponseMessage(var message: String) {
 

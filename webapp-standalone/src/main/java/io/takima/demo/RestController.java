@@ -1,30 +1,24 @@
 package io.takima.demo;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.takima.demo.Classes.Profile;
-import io.takima.demo.DAO.*;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.core.io.Resource;
+import io.takima.demo.classes.Profile;
+import io.takima.demo.dao.*;
+import io.takima.demo.mail.EmailService;
+import io.takima.demo.mail.EmailServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.mail.MessagingException;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
-import static com.google.api.ResourceProto.resource;
 
 /**
  *
@@ -40,10 +34,11 @@ public class RestController {
     private final ProjectDAO projectDAO;
     private final ExperienceDAO experienceDAO;
     private final PresentationDAO presentationDAO;
+    private final EmailServiceImpl emailService;
 
 
 
-    public RestController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO) {
+    public RestController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, EmailServiceImpl emailService) {
         this.userDAO = userDAO;
         this.hobbyDAO = hobbyDAO;
         this.educationDAO = educationDAO;
@@ -51,6 +46,7 @@ public class RestController {
         this.projectDAO = projectDAO;
         this.experienceDAO = experienceDAO;
         this.presentationDAO = presentationDAO;
+        this.emailService = emailService;
     }
 
     @GetMapping(path = "/downloadProfile")
@@ -87,6 +83,30 @@ public class RestController {
 
     }
 
+    @PostMapping("/contact")
+    public RedirectView contactAdmin(@ModelAttribute Mail mail) throws MessagingException {
+        sendMail(mail);
+        return new RedirectView("/");
+    }
+
+    private void sendMail(Mail mail) throws MessagingException {
+        mail.setTo(getCurrentUser().getEmail());
+        Map<String, Object> templateModel = new HashMap<>();
+
+        templateModel.put("senderName", mail.getSenderName());
+        templateModel.put("senderMail", mail.getSenderMail());
+        templateModel.put("subject", mail.getSubject());
+        templateModel.put("text", mail.getText());
+        templateModel.put("receiverName", getCurrentUser().getLastName());
+        emailService.sendMessageUsingThymeleafTemplate(mail.getTo(), mail.getSubject(), templateModel);
+    }
+
+
+    public User getCurrentUser() {
+        // TODO : ajouter tests , erreurs etc ...
+        User user = userDAO.findAll().iterator().next();
+        return user;
+    }
 
     private Profile getProfile() {
 

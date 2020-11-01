@@ -1,4 +1,4 @@
-package io.takima.demo.DAO;
+package io.takima.demo.dao;
 
 import io.takima.demo.Project;
 import org.springframework.data.repository.CrudRepository;

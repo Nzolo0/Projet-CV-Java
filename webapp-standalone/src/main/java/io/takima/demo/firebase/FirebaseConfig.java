@@ -15,6 +15,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import javax.annotation.PostConstruct;
 
@@ -24,10 +26,13 @@ public class FirebaseConfig {
     @PostConstruct
     public void initialize() {
         try {
-            FileInputStream refreshToken = new FileInputStream("src/main/java/io/takima/demo/onlinecv-83159-firebase-adminsdk-nofc8-1f5165cafe.json");
+            Resource resource = new ClassPathResource("onlinecv-83159-firebase-adminsdk-nofc8-1f5165cafe.json");
 
+            if (!resource.exists()) {
+                throw new IllegalStateException("Firebase service key file not found");
+            }
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(refreshToken))
+                    .setCredentials(GoogleCredentials.fromStream(resource.getInputStream()))
                     .setDatabaseUrl("https://onlinecv-83159.firebaseio.com/")
                     .build();
 

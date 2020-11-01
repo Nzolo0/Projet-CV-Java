@@ -1,4 +1,4 @@
-package io.takima.demo.Classes
+package io.takima.demo.classes.file
 
 class ResponseFile(var name: String, var url: String, var type: String, var size: Long) {
 

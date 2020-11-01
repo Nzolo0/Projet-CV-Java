@@ -1,7 +1,9 @@
 package io.takima.demo;
 
-import io.takima.demo.Classes.*;
-import io.takima.demo.DAO.*;
+import io.takima.demo.classes.*;
+import io.takima.demo.classes.file.ResponseFile;
+import io.takima.demo.classes.wrapper.*;
+import io.takima.demo.dao.*;
 import io.takima.demo.files.FileStorageService;
 import io.takima.demo.firebase.FireAuth;
 import io.takima.demo.mail.EmailServiceImpl;
@@ -33,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -42,7 +43,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequestMapping("/")
 @Controller
-public class LibraryController {
+public class AdminController {
 
     private final UserDAO userDAO;
     private final HobbyDAO hobbyDAO;
@@ -52,7 +53,6 @@ public class LibraryController {
     private final ExperienceDAO experienceDAO;
     private final PresentationDAO presentationDAO;
     private final FileStorageService fileStorageService;
-    private final EmailServiceImpl emailService;
 
     private ArrayList<Experience> experienceList;
     private ArrayList<Education> educationList;
@@ -60,13 +60,13 @@ public class LibraryController {
     private ArrayList<Hobby> hobbyList;
     private ArrayList<Project> projectList;
 
-    private String token = null;
+    public static String token = null;
 
     public String clientId="77d3miszbwaz49";
     public String clientSecret="jKNQuZsVuSXnhg1i";
     public String redirectUrl="http://localhost:8080/afterauth";
 
-    public LibraryController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, FileStorageService fileStorageService, EmailServiceImpl emailService, ArrayList<Experience> experienceList, ArrayList<Education> educationList, ArrayList<Skill> skillList, ArrayList<Hobby> hobbyList, ArrayList<Project> projectList) {
+    public AdminController(UserDAO userDAO, HobbyDAO hobbyDAO, EducationDAO educationDAO, SkillDAO skillDAO, ProjectDAO projectDAO, ExperienceDAO experienceDAO, PresentationDAO presentationDAO, FileStorageService fileStorageService, ArrayList<Experience> experienceList, ArrayList<Education> educationList, ArrayList<Skill> skillList, ArrayList<Hobby> hobbyList, ArrayList<Project> projectList) {
         this.userDAO = userDAO;
         this.hobbyDAO = hobbyDAO;
         this.educationDAO = educationDAO;
@@ -75,7 +75,6 @@ public class LibraryController {
         this.experienceDAO = experienceDAO;
         this.presentationDAO = presentationDAO;
         this.fileStorageService = fileStorageService;
-        this.emailService = emailService;
         this.experienceList = experienceList;
         this.educationList = educationList;
         this.skillList = skillList;
@@ -83,56 +82,6 @@ public class LibraryController {
         this.projectList = projectList;
     }
 
-    @GetMapping
-    public String homePage(Model m) {
-
-        sendAttributesIndex(m);
-
-        return "index";
-    }
-
-    private void sendAttributesIndex(Model m) {
-
-        // TODO : change it
-        // Optional<User> optUser = userDAO.findById((long) 1);
-        Optional<Presentation> optPresentation = Optional.ofNullable(presentationDAO.findAll().iterator().next());
-
-        List<ResponseFile> files = collectFilesUrl();
-
-        Profile profile = getProfile();
-
-
-        if (true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
-
-            m.addAttribute("user", profile.getCurrentUserHTML());
-            m.addAttribute("hobbies", profile.getHobbyHTML());
-            m.addAttribute("education", profile.getEducationHTML()); // add sort
-            m.addAttribute("skill", profile.getSkillHTML());
-            m.addAttribute("project", profile.getProject());
-            m.addAttribute("experience",profile.getExperienceHTML());
-            m.addAttribute("presentation", profile.getPresentationHTML());
-            m.addAttribute("mail", new Mail());
-            m.addAttribute("files", files.stream().findFirst().get());
-
-        }
-    }
-
-    @NotNull
-    private List<ResponseFile> collectFilesUrl() {
-        return fileStorageService.getAllFiles().map(dbFile -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/files/")
-                    .path(dbFile.getId())
-                    .toUriString();
-
-            return new ResponseFile(
-                    dbFile.getName(),
-                    fileDownloadUri,
-                    dbFile.getType(),
-                    dbFile.getData().length);
-        }).collect(Collectors.toList());
-    }
 
     @GetMapping("/login")
     public String loginPage(Model m) {
@@ -150,11 +99,6 @@ public class LibraryController {
 
             return "redirect:/";
         }
-    }
-
-    @GetMapping("/test")
-    public String testPage() {
-        return "test";
     }
 
     @PostMapping("/login")
@@ -183,48 +127,29 @@ public class LibraryController {
     }
 
     private void sendAttributesAdmin(Model m) {
-        // todo: change it
-        //Optional<User> optUser = userDAO.findById((long) 1);
+
         Optional<Presentation> optPresentation = Optional.ofNullable(presentationDAO.findAll().iterator().next());
 
         List<ResponseFile> files = collectFilesUrl();
 
         //if(true && optPresentation.isPresent() && files.stream().findFirst().isPresent()) {
-        if (true && true && files.stream().findFirst().isPresent()) {
-            
-            m.addAttribute("user", getCurrentUser());
-            m.addAttribute("presentation", optPresentation.get());
-            m.addAttribute("expWrapper", getExperienceWrapper());
-            m.addAttribute("eduWrapper", getEducationWrapper());
-            m.addAttribute("skillWrapper", getSkillWrapper());
-            m.addAttribute("hobbyWrapper", getHobbyWrapper());
-            m.addAttribute("projectWrapper", getProjectWrapper());
+        if (files.stream().findFirst().isPresent()) {
             m.addAttribute("files", files.stream().findFirst().get());
-
         }
-    }
 
-    @PostMapping(value = "/", params = "signIn")
-    public String signInIndex() {
-
-        return "redirect:/login";
-    }
-
-    @PostMapping(value = "/", params = "signOut")
-    public String signOutIndex(@RequestParam String tok) {
-
-        token = tok;
-        System.out.println(tok);
-
-        return "redirect:/";
-
+        m.addAttribute("user", getCurrentUser());
+        m.addAttribute("presentation", optPresentation.get());
+        m.addAttribute("expWrapper", getExperienceWrapper());
+        m.addAttribute("eduWrapper", getEducationWrapper());
+        m.addAttribute("skillWrapper", getSkillWrapper());
+        m.addAttribute("hobbyWrapper", getHobbyWrapper());
+        m.addAttribute("projectWrapper", getProjectWrapper());
     }
 
     @PostMapping(value = "/admin", params = "signOut")
     public String signOutAdmin(@RequestParam String tok) {
 
         token = tok;
-        System.out.println(tok);
 
         return "redirect:/";
     }
@@ -403,6 +328,23 @@ public class LibraryController {
     }
 
     @NotNull
+    private List<ResponseFile> collectFilesUrl() {
+        return fileStorageService.getAllFiles().map(dbFile -> {
+            String fileDownloadUri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/files/")
+                    .path(dbFile.getId())
+                    .toUriString();
+
+            return new ResponseFile(
+                    dbFile.getName(),
+                    fileDownloadUri,
+                    dbFile.getType(),
+                    dbFile.getData().length);
+        }).collect(Collectors.toList());
+    }
+
+    @NotNull
     private ExperienceWrapper getExperienceWrapper() {
         experienceList = (ArrayList<Experience>) sortExperiences();
         ExperienceWrapper expWrapper = new ExperienceWrapper();
@@ -488,37 +430,10 @@ public class LibraryController {
     }
 
 
-    @PostMapping("/contact")
-    public RedirectView contactAdmin(RedirectAttributes attrs, @ModelAttribute Mail mail) throws MessagingException {
-        sendMail(mail);
-        return new RedirectView("/");
-    }
-
-    private void sendMail(Mail mail) throws MessagingException {
-        //mail.setRecipientName("thymeleaf");
-        //mail.setSubject("Sujet");
-        // TODO : remove  after tests mail.setTo("JeanLapin ?);
-        mail.setTo("clement.bardoux@epfedu.fr");
-        Map<String, Object> templateModel = new HashMap<>();
-
-        templateModel.put("senderName", mail.getSenderName());
-        templateModel.put("senderMail", mail.getSenderMail());
-        templateModel.put("subject", mail.getSubject());
-        templateModel.put("text", mail.getText());
-        templateModel.put("receiverName", getCurrentUser().getLastName());
-        emailService.sendMessageUsingThymeleafTemplate(mail.getTo(), mail.getSubject(), templateModel);
-    }
-
     public User getCurrentUser() {
         // TODO : ajouter tests , erreurs etc ...
         User user = userDAO.findAll().iterator().next();
-        System.out.println(user.toString());
         return user;
-    }
-
-    @GetMapping("/uploadP")
-    public String UploadPage(Model m) {
-        return "upload";
     }
 
     //create button on your page and hit this get request
@@ -526,17 +441,6 @@ public class LibraryController {
     public String authorization() {
         String authorizationUri = "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUrl + "&scope=r_liteprofile%20r_emailaddress";
         return "redirect:" + authorizationUri;
-    }
-    private Profile getProfile() {
-         Profile profile = new Profile();
-        profile.setEducation(educationDAO.findAll());
-        profile.setExperience(experienceDAO.findAll());
-        profile.setHobby(hobbyDAO.findAll());
-        profile.setPresentation(presentationDAO.findAll());
-        profile.setProject(projectDAO.findAll());
-        profile.setSkills(skillDAO.findAll());
-        profile.setUser(userDAO.findAll());
-        return profile;
     }
 
     //after login in your linkedin account your app will hit this get request
@@ -547,7 +451,7 @@ public class LibraryController {
 
         //to trade your authorization code for access token
         String accessTokenUri = "https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=" + authorizationCode + "&redirect_uri=" + redirectUrl + "&client_id=" + clientId + "&client_secret=" + clientSecret + "";
-       
+
 
         // linkedin api to get linkedidn profile detail
         String linedkinDetailUri = "https://api.linkedin.com/v2/me";
@@ -570,46 +474,6 @@ public class LibraryController {
 
         return "redirect:/admin";
     }
-
-        private String markdownToHTML (String markdown){
-            Parser parser = Parser.builder()
-                    .build();
-
-            Node document = parser.parse(markdown);
-            HtmlRenderer renderer = HtmlRenderer.builder()
-                    .build();
-
-            return renderer.render(document).replace("<p>", "").replace("</p>", "");
-        }
-
-        private User getUserHTML (User user){
-            return new User(
-                    user.getId(),
-                    markdownToHTML(user.getFirstName()),
-                    markdownToHTML(user.getLastName()),
-                    user.getAge(),
-                    markdownToHTML(user.getPhone()),
-                    markdownToHTML(user.getEmail()),
-                    markdownToHTML(user.getAddress()),
-                    markdownToHTML(user.getTitle()),
-                    markdownToHTML(user.getLinkedin()),
-                    markdownToHTML(user.getGithub()),
-                    markdownToHTML(user.getInstagram()),
-                    markdownToHTML(user.getFacebook()));
-
-        }
-
-        private Iterable<Hobby> getHobbyHTML (ArrayList < Hobby > hobby) {
-
-            ArrayList<Hobby> hobbyHTML = new ArrayList<Hobby>();
-
-            for (Hobby hob : hobby) {
-                hobbyHTML.add(new Hobby(hob.getId(), markdownToHTML(hob.getTitle()), markdownToHTML(hob.getDetails())));
-            }
-
-            return hobbyHTML;
-
-        }
 
 
     }

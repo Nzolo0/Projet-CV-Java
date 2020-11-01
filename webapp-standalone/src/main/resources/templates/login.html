@@ -32,8 +32,8 @@
 	<a class="navbar-brand js-scroll-trigger" href="#page-top">
                 <span class="d-block d-lg-none">
                 </span>
-		<span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2"
-											 th:src="${files.url}" alt=""/></span>
+		<span th:if="${files != null}" class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2"
+											 th:src="${files?.url}" alt=""/></span>
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
@@ -67,11 +67,6 @@
 	<div class="form-group">
 		<label for="inputPassword" class="sr-only">Password</label>
 		<input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
-	</div>
-	<div class="checkbox mb-3">
-		<label>
-			<input type="checkbox" value="remember-me"> Remember me
-		</label>
 	</div>
 	<input type="button" class="btn btn-lg btn-primary btn-block" value="Sign in" onclick="login()">
 

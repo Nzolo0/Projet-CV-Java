@@ -3,11 +3,10 @@ package io.takima.demo;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.takima.demo.Classes.FileDB;
-import io.takima.demo.DAO.FileDBDAO;
+import io.takima.demo.classes.file.FileDB;
+import io.takima.demo.dao.FileDBDAO;
 import io.takima.demo.files.FileStorageService;
-import io.takima.demo.Classes.ResponseFile;
-import io.takima.demo.Classes.ResponseMessage;
+import io.takima.demo.classes.file.ResponseFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

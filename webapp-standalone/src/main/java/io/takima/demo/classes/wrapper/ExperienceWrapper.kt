@@ -1,4 +1,4 @@
-package io.takima.demo.Classes
+package io.takima.demo.classes.wrapper
 
 import io.takima.demo.Experience
 

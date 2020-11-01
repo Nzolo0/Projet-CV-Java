@@ -35,17 +35,13 @@
                     document.getElementById('tokenValue').textContent = user.accessToken;
                     document.getElementById('idSignedIn').textContent = user.email;
                 }
-            }, function(error) {
-                console.log(error);
             });
         };
 
         window.addEventListener('load', function() {
-            mdEditor()
+            mdEditor();
             initApp()
         });
-
-
 
 
     </script>
@@ -58,13 +54,13 @@
         <button type="submit" class="btn btn-primary" onclick="signout()" name="signOut">Sign Out</button>
         <input type="hidden" id="tokenValue" name="tok">
     </form>
-    <div id="idSignedIn"></div>
+    <div id="idSignedIn" style="color: #FFFFFF"></div>
     <a class="navbar-brand js-scroll-trigger" href="#page-top">
                 <span class="d-block d-lg-none">
                     <span th:text="${user.firstName}"></span>
                 </span>
-        <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2"
-                                             th:src="${files.url}" alt=""/></span>
+        <span th:if="${files != null}" class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2"
+                                             th:src="${files?.url}" alt=""/></span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
@@ -92,7 +88,7 @@
 
             <div class="container">
                 <form method="GET" th:action="@{/authorization}" enctype="multipart/form-data">
-                    <input type="image" th:src="@{/assets/img/linkedin.png}" name="testAuth" width="180px">
+                    <input type="image" th:src="@{/assets/img/linkedin.png}" name="testAuth" width="250px">
                 </form>
                 <form method="POST" th:action="@{/api/uploadProfile}" enctype="multipart/form-data">
                     <label for="imageFile">Import Profile :</label>
@@ -440,12 +436,6 @@
                     text.item(i).onclick = function (){
                     var editor = new Editor({
                        element:this
-                    });
-                    editor.render();
-                }
-                text.item(i) = function (){
-                    var editor = new Editor({
-                        element:this
                     });
                     editor.render();
                 }

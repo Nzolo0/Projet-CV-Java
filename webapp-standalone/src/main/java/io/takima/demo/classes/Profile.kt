@@ -1,4 +1,4 @@
-package io.takima.demo.Classes
+package io.takima.demo.classes
 
 import io.takima.demo.*
 import org.commonmark.parser.Parser

@@ -1,4 +1,4 @@
-package io.takima.demo.Classes
+package io.takima.demo.classes.file
 
 import org.hibernate.annotations.GenericGenerator
 import javax.persistence.*

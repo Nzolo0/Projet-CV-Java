@@ -1,7 +1,6 @@
-package io.takima.demo.DAO;
+package io.takima.demo.dao;
 
 import io.takima.demo.Education;
-import io.takima.demo.Presentation;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +8,5 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public interface PresentationDAO extends CrudRepository<Presentation, Long> {
+public interface EducationDAO extends CrudRepository<Education, Long> {
 }
