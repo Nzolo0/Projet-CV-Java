@@ -138,7 +138,7 @@
 
             </h1>
             <div class="subheading mb-5">
-                <span th:utext="${user.address}"></span> · <span th:text="${user.phone}"></span> ·
+                <span th:utext="${user.address}"></span> · <span th:utext="${user.phone}"></span> ·
                 <a th:href="'mailto:' + ${user.email}"><span th:utext="${user.email}"></span></a>
             </div>
             <p class="lead mb-5" th:utext="${presentation.description}"></p>
