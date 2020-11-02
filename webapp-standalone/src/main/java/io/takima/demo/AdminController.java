@@ -438,7 +438,6 @@ public class AdminController {
         //to trade your authorization code for access token
         String accessTokenUri = "https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=" + authorizationCode + "&redirect_uri=" + redirectUrl + "&client_id=" + clientId + "&client_secret=" + clientSecret + "";
 
-
         // linkedin api to get linkedidn profile detail
         String linedkinDetailUri = "https://api.linkedin.com/v2/me";
 
@@ -456,20 +455,15 @@ public class AdminController {
         //store json data
         JSONObject jsonObjOfLinkedinDetail = new JSONObject(linkedinDetailRequest.getBody());
         //print json data in console
-        System.out.println(jsonObjOfLinkedinDetail);
-
 
         ObjectMapper mapper = new ObjectMapper();
         LinkedinData linkedinData = mapper.readValue(jsonObjOfLinkedinDetail.toString(), LinkedinData.class);
 
         User user = getCurrentUser();
-
         user.setLastName(linkedinData.getLocalizedLastName());
         user.setFirstName(linkedinData.getLocalizedFirstName());
-
         userDAO.delete(user);
         userDAO.save(user);
-
         return "redirect:/admin";
     }
 

@@ -51,6 +51,10 @@ public class IndexController {
         return "index";
     }
 
+    /**
+     *
+     * @param m
+     */
     private void sendAttributesIndex(Model m) {
 
         List<ResponseFile> files = collectFilesUrl();

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 /**
- *
+ * Class representing User Profile (without picture)
  */
 @Component
 class Profile {
@@ -19,6 +19,11 @@ class Profile {
     var skills: Iterable<Skill>? = null
     var user: Iterable<User>? = null
 
+
+    /**
+     * Convert Hobby data to HTML
+     * @return : Iterable<Hobby>
+     */
     fun getHobbyHTML(): Iterable<Hobby>? {
         val hobbyHTML = ArrayList<Hobby>()
         for ((id, title, details) in this.hobby!!) {
@@ -26,7 +31,10 @@ class Profile {
         }
         return hobbyHTML
     }
-
+    /**
+     * Convert Education data to HTML
+     * @return : Iterable<Education>
+     */
     fun getEducationHTML(): Iterable<Education>? {
         val educationHTML = ArrayList<Education>()
         for ((id, title, name, location, startDate, endDate, description) in this.education!!) {
@@ -43,7 +51,10 @@ class Profile {
         educationHTML.sort()
         return educationHTML
     }
-
+    /**
+     * Convert User data to HTML
+     * @return : Iterable<User>
+     */
     fun getExperienceHTML(): Iterable<Experience>? {
         val experienceHTML = ArrayList<Experience>()
         for ((id, title, companyName, location, startDate, endDate, description) in this.experience!!) {
@@ -62,7 +73,10 @@ class Profile {
         experienceHTML.sort()
         return experienceHTML
     }
-
+    /**
+     * Convert User data to HTML
+     * @return : Iterable<User>
+     */
     fun getProjectHTML(): Iterable<Project>? {
         val projectHTML = ArrayList<Project>()
         for ((id, title, date, description) in this.project!!) {
@@ -75,6 +89,10 @@ class Profile {
         return projectHTML
     }
 
+    /**
+     * Convert Skill data to HTML
+     * @return : Iterable<Skill>
+     */
     fun getSkillHTML(): Iterable<Skill>? {
         val skillHTML = ArrayList<Skill>()
         for ((id, name, grade) in this.skills!!) {
@@ -86,6 +104,10 @@ class Profile {
     }
 
 
+    /**
+     * Convert User data to HTML
+     * @return : Iterable<User>
+     */
     fun getCurrentUserHTML(): User? {
         var user2 = this.user?.iterator()?.next()
         user2?.id = user2?.id
@@ -95,6 +117,10 @@ class Profile {
         return user2
     }
 
+    /**
+     * Convert Presentation data to HTML
+     * @return : Iterable<Presentation>
+     */
     fun getPresentationHTML(): Presentation? {
         var presentation2 = this.presentation?.iterator()?.next()
         presentation2?.id = presentation2?.id
@@ -103,7 +129,11 @@ class Profile {
         return presentation2
     }
 
-
+    /**
+     * Convert MarkDown to HTML
+     * @param:String
+     * @return:String
+     */
     fun markdownToHTML(markdown: String): String? {
         val parser = Parser.builder()
                 .build()
