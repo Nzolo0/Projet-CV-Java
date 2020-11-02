@@ -29,6 +29,7 @@
 
     <script>
 
+        // Verify if a user is connected
         initApp = function() {
             firebase.auth().onAuthStateChanged(function(user) { //admin forcément connecté
                 if (user) {
@@ -38,6 +39,7 @@
             });
         };
 
+        // Load on start
         window.addEventListener('load', function() {
             mdEditor();
             initApp();
@@ -413,6 +415,8 @@
 
 
 <script>
+
+    // Function to signout the user
     function signout() {
         firebase.auth().signOut();
         document.getElementById('tokenValue').textContent = firebase.auth.currentUser.accessToken;
@@ -420,6 +424,7 @@
 
     const uploadField = document.getElementById("imageFile");
 
+    // Check if profile image isn't too big
     uploadField.onchange = function() {
         if(this.files[0].size > 2097152){
             alert("File is too big! 2MB maximum");
@@ -427,6 +432,7 @@
         }
     };
 
+    // If no image profile chose, can't submit
     function emptyImage() {
         var x;
         x = document.getElementById("imageFile").value;
@@ -437,6 +443,7 @@
 
     }
 
+    // Add markdown editor to the inputs
     function mdEditor() {
 
             var text = document.querySelectorAll("input[type=text] ");

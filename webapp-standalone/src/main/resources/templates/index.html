@@ -24,6 +24,7 @@
 
     <script>
 
+        // Verify if a user is connected
         initApp = function() {
 
             firebase.auth().onAuthStateChanged(function(user) {
@@ -41,7 +42,7 @@
             });
         }
 
-
+        // Load on start
         window.addEventListener('load', function() {
             initApp()
         });
@@ -49,6 +50,7 @@
     </script>
 
     <script>
+        // function to change color of page
         function changeColor(color,color2) { //change body theme
             document.body.style.background = color;
             document.body.style.color = color2;
@@ -284,6 +286,7 @@
 <script src="js/scripts.js"></script>
 
 <script>
+    // Function to signout the user
     function signout() {
         firebase.auth().signOut();
         document.getElementById('tokenValue').textContent = firebase.auth.currentUser.accessToken;

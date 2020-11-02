@@ -126,8 +126,8 @@ public class IndexController {
     }
 
     /**
-     *
-     * @return
+     * Extract User's Profile
+     * @return Profile
      */
     private Profile getProfile() {
         Profile profile = new Profile();
