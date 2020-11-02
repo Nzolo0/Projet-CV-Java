@@ -46,3 +46,5 @@ password : rootroot
 - Proposer une customisation des couleurs 
 - Implémenter la sécurité (utiliser Firebase Auth)
 - Faire en sorte que toutes les sections utilisent du Markdown et utiliser un éditeur Markdown pour formater votre contenu
+
+![image](assetsREADME/CV.PNG)
