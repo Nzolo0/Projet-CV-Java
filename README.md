@@ -1,14 +1,22 @@
-# PROJET CV 
+# PROJET CV
+
+# Groupe
+- Enzo BATISTA
+- Paul DE BOISSEL
+- Rémi BELTRAMINI
+- Clément BARDOUX
+
+# Installation
 
 1) Importer le projet dans IntelliJ IDEA en important le fichier "pom.xml" à la racine de ce répertoire
 
 2) Importer le fichier application.properties dans src/main/resources
 
-3) Importer le fichier onlinecv-83159-firebase-adminsdk-nofc8-1f5165cafe.json dans src/main/java/io/takima/demo
+3) Importer le fichier onlinecv-83159-firebase-adminsdk-nofc8-1f5165cafe.json dans src/main/resources
 
 4) Importer les librairies Maven nécessaires à l'exécution du projet.
 
-5) Exécuter votre DB mysql. Si vous avez docker, vous pouvez utiliser la commande suivante:
+5) Exécuter la DB mysql. Si vous avez docker, vous pouvez utiliser la commande suivante:
     ```
     docker run --name mariadb --rm -e MYSQL_ROOT_PASSWORD=toor -e MYSQL_DATABASE=defaultdb -p 3306:3306 -v "`pwd`/initdb:/docker-entrypoint-initdb.d" mariadb
     ```
@@ -23,28 +31,25 @@
     - Password : toor
     - Database : defaultdb
     - Puis dans initdb, exécuter 1_TABLES.sql
-    - Dans Target Data Source, ajouter la base de donnée fraichement créée, puis exécuter.
+    - Dans Target Data Source, ajouter la base de données nouvellement créée, puis exécuter.
     - Exécuter 2_Default_Entries.sql de la même manière.
 
-8) Exécuter l'application via IntelliJ, et vérifiez qu'elle fonctionne sur http://localhost:8080 (par défaut)
-
-9) Connexion admin : user : noreply.supercv@gmail.com
-password : rootroot
+8) Exécuter l'application via IntelliJ, et vérifier qu'elle fonctionne sur http://localhost:8080 (par défaut)
 
 # Bilan : 
 
 ### Fonctionnalités réalisées :
-- Créer / éditer / supprimer toutes les sections de du profil : about, experience, education, skills, hobbies
-- Éditer la meta-data de chaque élément du profil : nom, email, photo de profil
-- Ajouter des liens vers réseaux sociaux professionnels : LinkedIn, Github, Twitter, Instagram
-- Affichage du CV en plusieurs pages (navigation)
+- Créer / éditer / supprimer toutes les sections du profil : about, experience, education, skills, hobbies
+- Éditer la meta-data de chaque élément du profil : nom, email, photo de profil...
+- Ajouter des liens vers réseaux sociaux professionnels : LinkedIn, Github, Facebook, Instagram
+- Affichage du CV en une seule page (navigation)
 - Autoriser à être contacté à travers un formulaire de contact, qui envoie un email directement
 
 ### Bonus réalisés:
 - Autoriser l'import / export des données de votre CV vers un fichier JSON externe
-- Importer la donnée depuis votre compte LinkedIn (juste le nom/prénom par manque de droit)
+- Importer des données depuis votre compte LinkedIn (juste le nom/prénom par manque de droit)
 - Proposer une customisation des couleurs 
-- Implémenter la sécurité (utiliser Firebase Auth)
+- Implémenter la sécurité (utiliser Firebase Auth (Front OK / Back Moyen))
 - Faire en sorte que toutes les sections utilisent du Markdown et utiliser un éditeur Markdown pour formater votre contenu
 
 ![image](assetsREADME/CV.PNG)
