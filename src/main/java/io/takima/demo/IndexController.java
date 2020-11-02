@@ -74,7 +74,7 @@ public class IndexController {
         m.addAttribute("hobbies", profile.getHobbyHTML());
         m.addAttribute("education", profile.getEducationHTML()); // add sort
         m.addAttribute("skill", profile.getSkillHTML());
-        m.addAttribute("project", profile.getProject());
+        m.addAttribute("project", profile.getProjectHTML());
         m.addAttribute("experience", profile.getExperienceHTML());
         m.addAttribute("presentation", profile.getPresentationHTML());
         m.addAttribute("mail", new Mail());

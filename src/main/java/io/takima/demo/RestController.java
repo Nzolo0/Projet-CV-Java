@@ -138,13 +138,13 @@ public class RestController {
     private Profile getProfile() {
 
         Profile profile = new Profile();
+        profile.setUser(userDAO.findAll());
         profile.setEducation(educationDAO.findAll());
         profile.setExperience(experienceDAO.findAll());
         profile.setHobby(hobbyDAO.findAll());
         profile.setPresentation(presentationDAO.findAll());
         profile.setProject(projectDAO.findAll());
         profile.setSkills(skillDAO.findAll());
-        profile.setUser(userDAO.findAll());
         return profile;
     }
 

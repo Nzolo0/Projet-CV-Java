@@ -111,6 +111,7 @@ class Profile {
     fun getCurrentUserHTML(): User? {
         var user2 = this.user?.iterator()?.next()
         user2?.id = user2?.id
+        user2?.firstName = markdownToHTML(user2?.firstName!!)
         user2?.lastName = markdownToHTML(user2?.lastName!!)
         user2.email = markdownToHTML(user2.email!!)
         user2.address = markdownToHTML(user2.address!!)
