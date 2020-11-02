@@ -1,7 +1,7 @@
 package io.takima.demo
 
 /**
- *
+ * Information about Mails
  */
 
 class Mail {

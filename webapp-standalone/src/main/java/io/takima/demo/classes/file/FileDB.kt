@@ -3,6 +3,9 @@ package io.takima.demo.classes.file
 import org.hibernate.annotations.GenericGenerator
 import javax.persistence.*
 
+/**
+ * Information about Files to stock profile image
+ */
 @Entity(name = "files")
 data class FileDB(
         @Id

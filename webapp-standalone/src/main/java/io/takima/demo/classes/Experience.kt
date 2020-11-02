@@ -3,7 +3,7 @@ package io.takima.demo
 import javax.persistence.*
 
 /**
- *
+ * Information about Experiences
  */
 @Entity(name = "experiences")
 data class Experience(
@@ -50,6 +50,9 @@ data class Experience(
         return result
     }
 
+    /**
+     * Sort experiences
+     */
     override fun compareTo(other: Experience): Int {
 
         if (endDate.isNullOrEmpty() && other.endDate.isNullOrEmpty())

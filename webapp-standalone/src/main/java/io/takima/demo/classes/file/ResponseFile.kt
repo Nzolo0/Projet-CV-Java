@@ -1,5 +1,8 @@
 package io.takima.demo.classes.file
 
+/**
+ * Get image with its URL
+ */
 class ResponseFile(var name: String, var url: String, var type: String, var size: Long) {
 
 

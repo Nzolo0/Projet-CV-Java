@@ -422,7 +422,7 @@ public class AdminController {
         return user;
     }
 
-    //create button on your page and hit this get request
+    //create button on the page and hit this get request
     @GetMapping(value = "/authorization", params = "testAuth")
     public String authorization() {
         String authorizationUri = "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUrl + "&scope=r_liteprofile%20r_emailaddress";
@@ -464,6 +464,7 @@ public class AdminController {
 
         User user = getCurrentUser();
 
+        //store data in the forms
         user.setLastName(linkedinData.getLocalizedLastName());
         user.setFirstName(linkedinData.getLocalizedFirstName());
 

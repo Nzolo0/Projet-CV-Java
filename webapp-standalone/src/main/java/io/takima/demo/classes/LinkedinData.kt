@@ -1,7 +1,7 @@
 package io.takima.demo
 
 /**
- *
+ * Information about LinkedinData
  */
 
 class LinkedinData {

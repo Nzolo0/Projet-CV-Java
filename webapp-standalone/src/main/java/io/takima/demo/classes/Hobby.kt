@@ -3,7 +3,7 @@ package io.takima.demo
 import javax.persistence.*
 
 /**
- *
+ * Information about Hobbies
  */
 @Entity(name = "hobbies")
 data class Hobby(
@@ -38,6 +38,9 @@ data class Hobby(
         return result
     }
 
+    /**
+     * Sort hobbies
+     */
     override fun compareTo(other: Hobby): Int {
 
         if (title.isNullOrEmpty() && other.title.isNullOrEmpty())

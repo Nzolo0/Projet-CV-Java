@@ -3,7 +3,7 @@ package io.takima.demo
 import javax.persistence.*
 
 /**
- *
+ * Information about Skills
  */
 @Entity(name = "skills")
 data class Skill(
@@ -37,7 +37,9 @@ data class Skill(
         result = 31 * result + (grade?.hashCode() ?: 0)
         return result
     }
-
+    /**
+     * Sort skills
+     */
     override fun compareTo(other: Skill): Int {
 
         if (name.isNullOrEmpty() && other.name.isNullOrEmpty())
