@@ -30,7 +30,7 @@
     <script>
 
         initApp = function() {
-            firebase.auth().onAuthStateChanged(function(user) {
+            firebase.auth().onAuthStateChanged(function(user) { //admin forcément connecté
                 if (user) {
                     document.getElementById('tokenValue').textContent = user.accessToken;
                     document.getElementById('idSignedIn').textContent = user.email;

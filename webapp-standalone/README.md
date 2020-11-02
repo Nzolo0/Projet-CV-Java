@@ -32,3 +32,19 @@ Exécuter 2_Default_Entries.sql de la même manière.
 
 9. Connexion admin : user : noreply.supercv@gmail.com
 password : rootroot
+
+Bilan : 
+
+Fonctionnalités réalisées :
+-Créer / éditer / supprimer toutes les sections de du profil : about, experience, education, skills, hobbies
+-Éditer la meta-data de chaque élément du profil : nom, email, photo de profil
+-Ajouter des liens vers réseaux sociaux professionnels : LinkedIn, Github, Twitter, Instagram
+-Affichage du CV en plusieurs pages (navigation)
+-Autoriser à être contacté à travers un formulaire de contact, qui envoie un email directement
+
+Bonus :
+-Autoriser l'import / export des données de votre CV vers un fichier JSON externe
+-Importer la donnée depuis votre compte LinkedIn (juste le nom/prénom par manque de droit)
+-Proposer une customisation des couleurs 
+-Implémenter la sécurité (utiliser Firebase Auth)
+-Faire en sorte que toutes les sections utilisent du Markdown et utiliser un éditeur Markdown pour formater votre contenu
