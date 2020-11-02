@@ -28,13 +28,13 @@
 
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
-                    document.getElementById('signIn').hidden = true;
+                    document.getElementById('signIn').hidden = true; //user connecté
                     document.getElementById('signOut').hidden = false;
                     document.getElementById('adminLink').hidden = false;
                     document.getElementById('tokenValue').textContent = user.accessToken;
                     document.getElementById('idSignedIn').textContent = user.email;
                 } else {
-                    document.getElementById('signIn').hidden = false;
+                    document.getElementById('signIn').hidden = false; //user déconnecté
                     document.getElementById('signOut').hidden = true;
                     document.getElementById('adminLink').hidden = true;
                 }
