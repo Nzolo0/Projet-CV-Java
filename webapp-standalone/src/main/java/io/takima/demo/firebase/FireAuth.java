@@ -12,6 +12,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Class to obtain user's token and email from Firebase
+ */
 public class FireAuth {
 
     private static final String BASE_URL = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/";
@@ -32,6 +35,13 @@ public class FireAuth {
         return instance;
     }
 
+    /**
+     * Method to get the token of a user from his username and password
+     * @param username Username
+     * @param password Password
+     * @return User's token
+     * @throws Exception Error
+     */
     public String auth(String username, String password) throws Exception {
 
         HttpURLConnection urlRequest = null;
@@ -66,6 +76,12 @@ public class FireAuth {
         return token;
     }
 
+    /**
+     * Method to get the email of an user from his token
+     * @param token User's token
+     * @return User's email
+     * @throws Exception Error
+     */
     public String getAccountInfo(String token) throws Exception {
 
         HttpURLConnection urlRequest = null;

@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
- *
+ * Controller for admin page
  */
 @RequestMapping("/")
 @Controller
@@ -68,7 +68,11 @@ public class AdminController {
         this.projectList = projectList;
     }
 
-
+    /**
+     * Method to access login page
+     * @param m Model
+     * @return index page if connected, login page if not connected
+     */
     @GetMapping("/login")
     public String loginPage(Model m) {
 
@@ -87,6 +91,13 @@ public class AdminController {
         }
     }
 
+    /**
+     * Method to login to the website
+     * @param inputEmail User's email
+     * @param inputPassword User's password
+     * @return admin page if connected, login page if not connected
+     * @throws Exception Error
+     */
     @PostMapping("/login")
     public String loginSubmit(@RequestParam String inputEmail, @RequestParam String inputPassword) throws Exception {
 
@@ -100,6 +111,11 @@ public class AdminController {
         }
     }
 
+    /**
+     * Method to access admin page
+     * @param m Model
+     * @return admin page if connected, login page if not connected
+     */
     @GetMapping("/admin")
     public String addUserPage(Model m) {
 
@@ -112,6 +128,10 @@ public class AdminController {
         }
     }
 
+    /**
+     *
+     * @param m
+     */
     private void sendAttributesAdmin(Model m) {
 
         Optional<Presentation> optPresentation = Optional.ofNullable(presentationDAO.findAll().iterator().next());

@@ -16,6 +16,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller to upload and download profile image
+ */
 @Controller
 @CrossOrigin("http://localhost:8081")
 public class FileController {
@@ -28,6 +31,11 @@ public class FileController {
         this.fileDBDAO = fileDBDAO;
     }
 
+    /**
+     * Method to store profile image in database
+     * @param file Profile image
+     * @return admin page
+     */
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
@@ -44,6 +52,10 @@ public class FileController {
         }
     }
 
+    /**
+     * Method to see profile images stored in database
+     * @return List of profile images
+     */
     @GetMapping("/files")
     public ResponseEntity<List<ResponseFile>> getListFiles() {
         List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
@@ -63,6 +75,11 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
+    /**
+     * Method to show a particular image
+     * @param id image id
+     * @return image
+     */
     @GetMapping("/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
         FileDB fileDB = storageService.getFile(id);

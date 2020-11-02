@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *
+ * Controller for homepage (index)
  */
 @RequestMapping("/")
 @Controller
@@ -43,6 +43,11 @@ public class IndexController {
         this.fileStorageService = fileStorageService;
     }
 
+    /**
+     * Method to show the homepage index
+     * @param m Model
+     * @return page index
+     */
     @GetMapping
     public String homePage(Model m) {
 
@@ -52,8 +57,8 @@ public class IndexController {
     }
 
     /**
-     *
-     * @param m
+     * Extracted method to send the attributes
+     * @param m Model
      */
     private void sendAttributesIndex(Model m) {
 
@@ -75,6 +80,10 @@ public class IndexController {
         m.addAttribute("mail", new Mail());
     }
 
+    /**
+     * Extracted method to get the profile images urls
+     * @return List of profile images
+     */
     @NotNull
     private List<ResponseFile> collectFilesUrl() {
         return fileStorageService.getAllFiles().map(dbFile -> {
@@ -92,13 +101,21 @@ public class IndexController {
         }).collect(Collectors.toList());
     }
 
-
+    /**
+     * Method to redirect the user from index to login page
+     * @return page login
+     */
     @PostMapping(value = "/", params = "signIn")
     public String signInIndex() {
 
         return "redirect:/login";
     }
 
+    /**
+     * Method to sign out the user
+     * @param tok User's token
+     * @return page index
+     */
     @PostMapping(value = "/", params = "signOut")
     public String signOutIndex(@RequestParam String tok) {
 
@@ -108,16 +125,19 @@ public class IndexController {
 
     }
 
-
+    /**
+     *
+     * @return
+     */
     private Profile getProfile() {
         Profile profile = new Profile();
+        profile.setUser(userDAO.findAll());
         profile.setEducation(educationDAO.findAll());
         profile.setExperience(experienceDAO.findAll());
         profile.setHobby(hobbyDAO.findAll());
         profile.setPresentation(presentationDAO.findAll());
         profile.setProject(projectDAO.findAll());
         profile.setSkills(skillDAO.findAll());
-        profile.setUser(userDAO.findAll());
         return profile;
     }
 
