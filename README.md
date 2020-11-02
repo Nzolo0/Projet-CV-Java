@@ -1,5 +1,4 @@
 # PROJET CV 
-=====
 
 1) Importer le projet dans IntelliJ IDEA en important le fichier "pom.xml" à la racine de ce répertoire
 
@@ -32,16 +31,16 @@
 9) Connexion admin : user : noreply.supercv@gmail.com
 password : rootroot
 
-#Bilan : 
+# Bilan : 
 
-###Fonctionnalités réalisées :
+### Fonctionnalités réalisées :
 - Créer / éditer / supprimer toutes les sections de du profil : about, experience, education, skills, hobbies
 - Éditer la meta-data de chaque élément du profil : nom, email, photo de profil
 - Ajouter des liens vers réseaux sociaux professionnels : LinkedIn, Github, Twitter, Instagram
 - Affichage du CV en plusieurs pages (navigation)
 - Autoriser à être contacté à travers un formulaire de contact, qui envoie un email directement
 
-###Bonus réalisés:
+### Bonus réalisés:
 - Autoriser l'import / export des données de votre CV vers un fichier JSON externe
 - Importer la donnée depuis votre compte LinkedIn (juste le nom/prénom par manque de droit)
 - Proposer une customisation des couleurs 
