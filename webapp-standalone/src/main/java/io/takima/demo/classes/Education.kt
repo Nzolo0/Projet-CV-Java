@@ -3,7 +3,7 @@ package io.takima.demo
 import javax.persistence.*
 
 /**
- *
+ * Information about Educations
  */
 @Entity(name = "educations")
 data class Education(
@@ -50,6 +50,9 @@ data class Education(
         return "Education(ed_id=$id, edu_title=$title, edu_name=$name, edu_location=$location, start_date=$startDate, end_date=$endDate, edu_description=$description)"
     }
 
+    /**
+     * Compare dates ton sort them
+     */
     override fun compareTo(other: Education): Int {
 
         if (endDate.isNullOrEmpty() && other.endDate.isNullOrEmpty())

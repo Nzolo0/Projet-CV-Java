@@ -1,5 +1,8 @@
 package io.takima.demo.classes.file
 
+/**
+ * Get a message
+ */
 class ResponseMessage(var message: String) {
 
     override fun equals(other: Any?): Boolean {

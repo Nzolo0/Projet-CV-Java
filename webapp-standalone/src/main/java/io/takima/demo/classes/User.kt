@@ -3,7 +3,7 @@ package io.takima.demo
 import javax.persistence.*
 
 /**
- *
+ * Information about users
  */
 @Entity(name = "users")
 data class User(
