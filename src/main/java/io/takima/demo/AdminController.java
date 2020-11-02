@@ -129,8 +129,8 @@ public class AdminController {
     }
 
     /**
-     *
-     * @param m
+     * Extracted method to send the attributes
+     * @param m Model
      */
     private void sendAttributesAdmin(Model m) {
 
@@ -152,6 +152,11 @@ public class AdminController {
         m.addAttribute("projectWrapper", getProjectWrapper());
     }
 
+    /**
+     * Method to sign out the user
+     * @param tok User's token
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "signOut")
     public String signOutAdmin(@RequestParam String tok) {
 
@@ -160,7 +165,15 @@ public class AdminController {
         return "redirect:/";
     }
 
-
+    /**
+     * Update about and presentation data
+     * @param user User
+     * @param presentation Presentation
+     * @param m Model
+     * @return admin page
+     * @throws ExecutionException Error
+     * @throws InterruptedException Error
+     */
     @PostMapping(value = "/admin", params = "submitUser")
     public String updateUser(@ModelAttribute User user, @ModelAttribute Presentation presentation, Model m) throws ExecutionException, InterruptedException {
 
@@ -183,6 +196,12 @@ public class AdminController {
         return "redirect:/admin#about";
     }
 
+    /**
+     * Update experience data
+     * @param expWrapper Experiences list
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "submitExp")
     public String updateExp(@ModelAttribute ExperienceWrapper expWrapper, Model m) {
 
@@ -193,6 +212,12 @@ public class AdminController {
         return "redirect:/admin#experience";
     }
 
+    /**
+     * Delete experience
+     * @param expId Experience's id
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "removeExp")
     public String deleteExp(@RequestParam Long expId, Model m) {
 
@@ -203,6 +228,11 @@ public class AdminController {
         return "redirect:/admin#experience";
     }
 
+    /**
+     * Add experience
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "addExp")
     public String addExp(Model m) {
 
@@ -213,6 +243,12 @@ public class AdminController {
         return "redirect:/admin#experience";
     }
 
+    /**
+     * Update education data
+     * @param eduWrapper Educations list
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "submitEdu")
     public String updateEdu(@ModelAttribute EducationWrapper eduWrapper, Model m) {
 
@@ -223,6 +259,12 @@ public class AdminController {
         return "redirect:/admin#education";
     }
 
+    /**
+     * Delete education
+     * @param eduId Education's id
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "removeEdu")
     public String deleteEdu(@RequestParam Long eduId, Model m) {
 
@@ -233,6 +275,11 @@ public class AdminController {
         return "redirect:/admin#education";
     }
 
+    /**
+     * Add education
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "addEdu")
     public String addEdu(Model m) {
 
@@ -243,6 +290,12 @@ public class AdminController {
         return "redirect:/admin#education";
     }
 
+    /**
+     * Update skills
+     * @param skillWrapper Skills list
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "submitSkill")
     public String updateSkill(@ModelAttribute SkillWrapper skillWrapper, Model m) {
 
@@ -253,6 +306,12 @@ public class AdminController {
         return "redirect:/admin#skills";
     }
 
+    /**
+     * Delete skill
+     * @param skillId Skill's id
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "removeSkill")
     public String deleteSkill(@RequestParam Long skillId, Model m) {
 
@@ -263,6 +322,11 @@ public class AdminController {
         return "redirect:/admin#skills";
     }
 
+    /**
+     * Add skill
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "addSkill")
     public String addSkill(Model m) {
 
@@ -273,6 +337,12 @@ public class AdminController {
         return "redirect:/admin#skills";
     }
 
+    /**
+     * Update Hobbies
+     * @param HobbyWrapper Hobbies list
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "submitHobby")
     public String updateHobby(@ModelAttribute HobbyWrapper HobbyWrapper, Model m) {
 
@@ -283,6 +353,12 @@ public class AdminController {
         return "redirect:/admin#hobbies";
     }
 
+    /**
+     * Delete hobby
+     * @param hobbyId Hobby's id
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "removeHobby")
     public String deleteHobby(@RequestParam Long hobbyId, Model m) {
 
@@ -293,6 +369,11 @@ public class AdminController {
         return "redirect:/admin#hobbies";
     }
 
+    /**
+     * Add hobby
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "addHobby")
     public String addHobby(Model m) {
 
@@ -303,6 +384,12 @@ public class AdminController {
         return "redirect:/admin#hobbies";
     }
 
+    /**
+     * Update projects
+     * @param ProjectWrapper Projects list
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "submitProject")
     public String updateProject(@ModelAttribute ProjectWrapper ProjectWrapper, Model m) {
 
@@ -313,6 +400,12 @@ public class AdminController {
         return "redirect:/admin#projects";
     }
 
+    /**
+     * Delete project
+     * @param projectId Project's id
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "removeProject")
     public String deleteProject(@RequestParam Long projectId, Model m) {
 
@@ -323,6 +416,11 @@ public class AdminController {
         return "redirect:/admin#projects";
     }
 
+    /**
+     * Add project
+     * @param m Model
+     * @return admin page
+     */
     @PostMapping(value = "/admin", params = "addProject")
     public String addProject(Model m) {
 
@@ -333,6 +431,10 @@ public class AdminController {
         return "redirect:/admin#projects";
     }
 
+    /**
+     * Extracted method to get the profile images urls
+     * @return List of profile images
+     */
     @NotNull
     private List<ResponseFile> collectFilesUrl() {
         return fileStorageService.getAllFiles().map(dbFile -> {
@@ -350,6 +452,10 @@ public class AdminController {
         }).collect(Collectors.toList());
     }
 
+    /**
+     * Wrapper for the experiences
+     * @return Experiences list
+     */
     @NotNull
     private ExperienceWrapper getExperienceWrapper() {
         experienceList = (ArrayList<Experience>) sortExperiences();
@@ -358,6 +464,10 @@ public class AdminController {
         return expWrapper;
     }
 
+    /**
+     * Wrapper for the educations
+     * @return Educations list
+     */
     @NotNull
     private EducationWrapper getEducationWrapper() {
         educationList = (ArrayList<Education>) sortEducations();
@@ -366,6 +476,10 @@ public class AdminController {
         return eduWrapper;
     }
 
+    /**
+     * Wrapper for the skills
+     * @return Skills list
+     */
     @NotNull
     private SkillWrapper getSkillWrapper() {
         skillList = (ArrayList<Skill>) sortSkills();
@@ -374,6 +488,10 @@ public class AdminController {
         return skillWrapper;
     }
 
+    /**
+     * Wrapper for the hobbies
+     * @return Hobbies list
+     */
     @NotNull
     private HobbyWrapper getHobbyWrapper() {
         hobbyList = (ArrayList<Hobby>) sortHobbies();
@@ -382,6 +500,10 @@ public class AdminController {
         return hobbyWrapper;
     }
 
+    /**
+     * Wrapper for the projects
+     * @return Projects list
+     */
     @NotNull
     private ProjectWrapper getProjectWrapper() {
         projectList = (ArrayList<Project>) sortProjects();
@@ -390,6 +512,10 @@ public class AdminController {
         return projectWrapper;
     }
 
+    /**
+     * Sort experiences by date
+     * @return Experiences list
+     */
     public List<Experience> sortExperiences() {
         List<Experience> experiences = new ArrayList<>();
 
@@ -399,6 +525,10 @@ public class AdminController {
         return experiences;
     }
 
+    /**
+     * Sort educations by date
+     * @return Educations list
+     */
     public List<Education> sortEducations() {
         List<Education> educations = new ArrayList<>();
 
@@ -408,6 +538,10 @@ public class AdminController {
         return educations;
     }
 
+    /**
+     * Sort skills by alphabetical order
+     * @return Skills list
+     */
     public List<Skill> sortSkills() {
         List<Skill> skills = new ArrayList<>();
 
@@ -417,6 +551,10 @@ public class AdminController {
         return skills;
     }
 
+    /**
+     * Sort hobbies by alphabetical
+     * @return Hobbies list
+     */
     public List<Hobby> sortHobbies() {
         List<Hobby> hobbies = new ArrayList<>();
 
@@ -426,6 +564,10 @@ public class AdminController {
         return hobbies;
     }
 
+    /**
+     * Sort projects by date
+     * @return Projects list
+     */
     public List<Project> sortProjects() {
         List<Project> projects = new ArrayList<>();
 
@@ -435,21 +577,32 @@ public class AdminController {
         return projects;
     }
 
-
+    /**
+     * Extract User's Profile
+     * @return Profile
+     */
     public User getCurrentUser() {
         return userDAO.findAll().iterator().next();
     }
 
-    //create button on the page and hit this get request
+    /**
+     * Create button on the page and hit this get request
+     * @return linkedin connection page
+     */
     @GetMapping(value = "/authorization", params = "testAuth")
     public String authorization() {
         String authorizationUri = "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUrl + "&scope=r_liteprofile%20r_emailaddress";
         return "redirect:" + authorizationUri;
     }
 
-    //after login in your linkedin account your app will hit this get request
+    /**
+     * After login in your linkedin account your app will hit this get request
+     * @param authorizationCode Authorization code
+     * @return admin page
+     * @throws JSONException Error
+     * @throws JsonProcessingException Error
+     */
     @GetMapping("/afterauth")
-
     //now store your authorization code
     public String afterauth(@RequestParam("code") String authorizationCode) throws JSONException, JsonProcessingException {
 

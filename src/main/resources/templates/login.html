@@ -75,6 +75,8 @@
 </div>
 
 <script>
+
+	// Function to login the user with email and password from inputs
 	function login() {
 
 		firebase
@@ -99,6 +101,7 @@
 					// ...
 				});
 
+		// Submit if
 		firebase.auth().onAuthStateChanged(function(user) {
 			if (user) {
 				document.forms["signInForm"].submit();
@@ -106,7 +109,6 @@
 		}, function(error) {
 			console.log(error);
 		});
-
 
 	}
 </script>
