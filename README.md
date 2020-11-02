@@ -1,4 +1,12 @@
-# PROJET CV 
+# PROJET CV
+
+# Groupe
+- Enzo BATISTA
+- Paul DE BOISSEL
+- Rémi BELTRAMINI
+- Clément BARDOUX
+
+# Installation
 
 1) Importer le projet dans IntelliJ IDEA en important le fichier "pom.xml" à la racine de ce répertoire
 
