@@ -20,7 +20,13 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
-
+    /**
+     * Send mail
+     * @param to
+     * @param subject
+     * @param htmlBody
+     * @throws MessagingException
+     */
     private void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
 
         MimeMessage message = emailSender.createMimeMessage();
@@ -31,6 +37,13 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(message);
     }
 
+    /**
+     * Generate a Thymeleaf mail template ( mail.html )
+     * @param to
+     * @param subject
+     * @param templateModel
+     * @throws MessagingException
+     */
     public void sendMessageUsingThymeleafTemplate(
             String to, String subject, Map<String, Object> templateModel)
             throws MessagingException {

@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Controller use to send mail, upload/ download profile
  */
 @RequestMapping(path = "/api")
 @Controller
@@ -48,6 +48,11 @@ public class RestController {
         this.emailService = emailService;
     }
 
+    /**
+     * Endpoint use to download json profile file
+     * @return
+     * @throws IOException
+     */
     @GetMapping(path = "/downloadProfile")
     public ResponseEntity<String> getfile() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -59,6 +64,13 @@ public class RestController {
                 ;
     }
 
+    /**
+     * Endpoint use to upload a profile
+     * @param file
+     * @param redirectAttributes
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/uploadProfile")
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
 
@@ -82,12 +94,23 @@ public class RestController {
 
     }
 
+    /**
+     * Endpoint use to send mail to the user
+     * @param mail
+     * @return
+     * @throws MessagingException
+     */
     @PostMapping("/contact")
     public RedirectView contactAdmin(@ModelAttribute Mail mail) throws MessagingException {
         sendMail(mail);
         return new RedirectView("/");
     }
 
+    /**
+     * Create a mail object and use EmailService to send mail
+     * @param mail
+     * @throws MessagingException
+     */
     private void sendMail(Mail mail) throws MessagingException {
         mail.setTo(getCurrentUser().getEmail());
         Map<String, Object> templateModel = new HashMap<>();
@@ -100,13 +123,18 @@ public class RestController {
         emailService.sendMessageUsingThymeleafTemplate(mail.getTo(), mail.getSubject(), templateModel);
     }
 
-
+    /**
+     * Extract User's Profile
+     * @return Profile
+     */
     public User getCurrentUser() {
-        // TODO : ajouter tests , erreurs etc ...
-        User user = userDAO.findAll().iterator().next();
-        return user;
+    return userDAO.findAll().iterator().next();
     }
 
+    /**
+     * Extract User's Profile
+     * @return Profile
+     */
     private Profile getProfile() {
 
         Profile profile = new Profile();
@@ -120,6 +148,10 @@ public class RestController {
         return profile;
     }
 
+    /**
+     * Save the Profile in the database
+     * @param profile
+     */
     private void uploadProfile(Profile profile) {
 
         userDAO.saveAll(profile.getUser());
@@ -131,6 +163,9 @@ public class RestController {
         skillDAO.saveAll(profile.getSkills());
     }
 
+    /**
+     * Erase the profile from the Database
+     */
     private void deleteProfile() {
         userDAO.deleteAll();
         educationDAO.deleteAll();

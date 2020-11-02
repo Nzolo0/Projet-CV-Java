@@ -6,7 +6,9 @@ import java.util.Map;
 
 public interface EmailService {
 
-
+    /**
+     * EmailService interface
+     */
     void sendMessageUsingThymeleafTemplate(String to,
                                            String subject,
                                            Map<String, Object> templateModel)

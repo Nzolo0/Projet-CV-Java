@@ -417,9 +417,7 @@ public class AdminController {
 
 
     public User getCurrentUser() {
-        // TODO : ajouter tests , erreurs etc ...
-        User user = userDAO.findAll().iterator().next();
-        return user;
+        return userDAO.findAll().iterator().next();
     }
 
     //create button on the page and hit this get request
